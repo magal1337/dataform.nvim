@@ -1,5 +1,3 @@
-local cjson = require("cjson")
-
 local M = {}
 
 function M.get_current_file_path()
@@ -39,7 +37,7 @@ function M.get_compiled_sql_job()
   local result = handle:read("*a")
   handle:close()
 
-  local json = cjson.decode(result)
+  local json = vim.fn.json_decode(result)
   local tables = json.tables
 
   for _, table in pairs(tables) do
