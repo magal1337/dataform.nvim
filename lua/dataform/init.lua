@@ -10,5 +10,6 @@ local M = {}
 -- plugin's other modules.
 M.compile = project.compile
 M.get_current_file_path = project.get_current_file_path
+M.get_compiled_sql_job = project.get_compiled_sql_job
 
 return M
