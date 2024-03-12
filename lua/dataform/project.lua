@@ -53,6 +53,12 @@ function M.get_compiled_sql_job()
 
   for _, table in pairs(tables) do
     if table.fileName == M.get_dataform_definitions_file_path() then
+      local bq_command = "bq query --dry_run" .. table.query
+
+      local handle = io.popen(bq_command)
+      local result = handle:read("*a")
+      handle:close()
+      print(result)
       return open_buffer_with_content(table.query)
     end
   end
