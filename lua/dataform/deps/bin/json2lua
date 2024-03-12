@@ -1,0 +1,3 @@
+#!/bin/sh
+
+LUAROCKS_SYSCONFDIR='/opt/homebrew/etc/luarocks' exec '/opt/homebrew/opt/lua/bin/lua5.4' -e 'package.path="/Volumes/Magal1337-2/Documents/personal-projects/dataform.nvim/lua/dataform/deps/share/lua/5.4/?.lua;/Volumes/Magal1337-2/Documents/personal-projects/dataform.nvim/lua/dataform/deps/share/lua/5.4/?/init.lua;"..package.path;package.cpath="/Volumes/Magal1337-2/Documents/personal-projects/dataform.nvim/lua/dataform/deps/lib/lua/5.4/?.so;"..package.cpath;local k,l,_=pcall(require,"luarocks.loader") _=k and l.add_context("lua-cjson","2.1.0.10-1")' '/Volumes/Magal1337-2/Documents/personal-projects/dataform.nvim/lua/dataform/deps/lib/luarocks/rocks-5.4/lua-cjson/2.1.0.10-1/bin/json2lua' "$@"
