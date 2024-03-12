@@ -33,7 +33,7 @@ end
 
 function M.get_compiled_sql_job()
   local command = "dataform compile --json"
-  local handle = io.popen(command .. " > /dev/null 2>&1")
+  local handle = io.popen(command .. " 2>&1")
   local result = handle:read("*a")
   handle:close()
 
