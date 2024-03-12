@@ -31,6 +31,17 @@ function M.compile()
   end
 end
 
+local function open_buffer_with_content(content)
+  -- Create a new buffer
+  local bufnr = vim.api.nvim_create_buf(false, true)
+  -- Set the content of the buffer
+  vim.api.nvim_buf_set_lines(bufnr, 0, -1, true, vim.split(content, "\n"))
+  -- Open the buffer in a new window
+  vim.api.nvim_command("split")
+  --                         -- Set the buffer for the new window
+  vim.api.nvim_win_set_buf(0, bufnr)
+end
+
 function M.get_compiled_sql_job()
   local command = "dataform compile --json"
   local handle = io.popen(command .. " 2>/dev/null")
@@ -42,7 +53,7 @@ function M.get_compiled_sql_job()
 
   for _, table in pairs(tables) do
     if table.fileName == M.get_dataform_definitions_file_path() then
-      return print(table.query)
+      return open_buffer_with_content(table.query)
     end
   end
 end
