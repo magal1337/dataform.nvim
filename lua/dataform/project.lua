@@ -2,7 +2,7 @@ local M = {}
 
 function M.compile()
   local command = "dataform compile"
-  local status = os.execute(command)
+  local status = os.execute(command .. " > /dev/null 2>&1")
   if status == 0 then
     print("Dataform compile successful.")
   else
