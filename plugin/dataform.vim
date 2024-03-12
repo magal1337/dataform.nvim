@@ -14,6 +14,6 @@ let g:loaded_dataform = 1
 " Defines a package path for Lua. This facilitates importing the
 " Lua modules from the plugin's dependency directory.
 let s:lua_rocks_deps_loc =  expand("<sfile>:h:r") . "/../lua/dataform/deps"
-exe "lua package.path = package.path .. ';'" .. s:lua_rocks_deps_loc .. "/?.lua"
+exe "lua package.path = package.path .. ';' .. s:lua_rocks_deps_loc .. '/?.lua'"
 
 autocmd BufWritePost *.sqlx execute "lua require('dataform').compile()"
