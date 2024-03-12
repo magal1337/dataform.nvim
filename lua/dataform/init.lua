@@ -9,5 +9,6 @@ local M = {}
 -- Routes calls made to this module to functions in the
 -- plugin's other modules.
 M.compile = project.compile
+M.get_current_file_path = project.get_current_file_path
 
 return M

@@ -1,5 +1,9 @@
 local M = {}
 
+function M.get_current_file_path()
+  return vim.fn.expand('%:p')
+end
+
 function M.compile()
   local command = "dataform compile"
   local status = os.execute(command .. " > /dev/null 2>&1")
