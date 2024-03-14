@@ -53,7 +53,11 @@ function M.get_compiled_sql_job()
 
   for _, table in pairs(tables) do
     if table.fileName == M.get_dataform_definitions_file_path() then
-      local composite_query = table.preOps .. table.query .. table.postOps
+      -- Check if table.preOps and table.postOps are not nil
+      -- and if they are tables (arrays), select the first element
+      local preOps = type(table.preOps) == "table" and table.preOps[1] or ""
+      local postOps = type(table.postOps) == "table" and table.postOps[1] or ""
+      local composite_query = preOps .. table.query .. postOps
       local bq_command = "bq query --dry_run '''" .. composite_query .. "'''"
 
       local handle = io.popen(bq_command .. " 2>/dev/null")
