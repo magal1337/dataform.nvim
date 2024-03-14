@@ -32,7 +32,10 @@ function M.go_to_ref()
   handle:close()
 
   local json = vim.fn.json_decode(result)
-  local tables = json.tables
+  local df_tables = json.tables
+  local df_declarations = json.declarations
+  -- union df_tables and df_declarations array to get all tables
+  local tables = vim.fn.extend(df_tables, df_declarations)
 
   for _, table in pairs(tables) do
     if table.target.schema == schema and table.target.name == table_name then
