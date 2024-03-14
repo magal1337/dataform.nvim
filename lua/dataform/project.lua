@@ -69,4 +69,31 @@ function M.get_compiled_sql_job()
   end
 end
 
+function M.get_compiled_sql_incremental_job()
+  local command = "dataform compile --json"
+  local handle = io.popen(command .. " 2>/dev/null")
+  local result = handle:read("*a")
+  handle:close()
+
+  local json = vim.fn.json_decode(result)
+  local tables = json.tables
+
+  for _, table in pairs(tables) do
+    if table.fileName == M.get_dataform_definitions_file_path() and table.type == "incremental" then
+      -- Check if table.preOps and table.postOps are not nil
+      -- and if they are tables (arrays), select the first element
+      local preOps = type(table.incrementalPreOps) == "table" and table.incrementalPreOps[1] or ""
+      local postOps = type(table.incrementalPostOps) == "table" and table.incrementalPostOps[1] or ""
+      local composite_query = preOps .. table.incrementalQuery .. ";\n" .. postOps
+      local bq_command = "echo " .. vim.fn.shellescape(composite_query) .. " | bq query --dry_run"
+
+      local handle = io.popen(bq_command .. " 2>/dev/null")
+      local result = handle:read("*a")
+      handle:close()
+      print(result)
+      return open_buffer_with_content(composite_query)
+    end
+  end
+end
+
 return M
