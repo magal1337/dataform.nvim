@@ -60,7 +60,8 @@ function M.get_compiled_sql_job()
       local composite_query = preOps .. table.query .. ";\n" .. postOps
       local bq_command = "bq query --dry_run '''" .. composite_query .. "'''"
 
-      local handle = io.popen(bq_command .. " 2>/dev/null")
+      --local handle = io.popen(bq_command .. " 2>/dev/null")
+      local handle = io.popen(bq_command)
       local result = handle:read("*a")
       handle:close()
       print(result)
