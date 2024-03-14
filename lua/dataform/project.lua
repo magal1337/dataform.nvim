@@ -60,8 +60,7 @@ function M.get_compiled_sql_job()
       local composite_query = preOps .. table.query .. ";\n" .. postOps
       local bq_command = "echo " .. vim.fn.shellescape(composite_query) .. " | bq query --dry_run"
 
-      --local handle = io.popen(bq_command .. " 2>/dev/null")
-      local handle = io.popen(bq_command)
+      local handle = io.popen(bq_command .. " 2>/dev/null")
       local result = handle:read("*a")
       handle:close()
       print(result)
