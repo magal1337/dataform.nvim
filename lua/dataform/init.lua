@@ -11,5 +11,6 @@ local M = {}
 M.compile = project.compile
 M.get_current_file_path = project.get_current_file_path
 M.get_compiled_sql_job = project.get_compiled_sql_job
+M.get_compiled_sql_incremental_job = project.get_compiled_sql_incremental_job
 
 return M
