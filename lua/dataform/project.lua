@@ -57,7 +57,7 @@ function M.get_compiled_sql_job()
       -- and if they are tables (arrays), select the first element
       local preOps = type(table.preOps) == "table" and table.preOps[1] or ""
       local postOps = type(table.postOps) == "table" and table.postOps[1] or ""
-      local composite_query = preOps .. table.query .. postOps
+      local composite_query = preOps .. table.query .. ";\n" .. postOps
       local bq_command = "bq query --dry_run '''" .. composite_query .. "'''"
 
       local handle = io.popen(bq_command .. " 2>/dev/null")
