@@ -17,6 +17,31 @@ function M.get_dataform_definitions_file_path()
   end
 end
 
+local function open_file(file_path)
+  vim.cmd("edit " .. file_path)
+end
+
+function M.go_to_ref()
+  -- Get the current line
+  --local line = vim.fn.getline('.')
+  local line = '     ${ ref("raw_gafe_salesforce","solar_design") } '
+  -- Find the position of the 'ref{' pattern
+  local _, _, schema, table_name = line:find('%${%s*ref%(%s*"([^"]+)"%s*,%s*"([^"]+)"%s*%)%s*}')
+  local command = "dataform compile --json"
+  local handle = io.popen(command .. " 2>/dev/null")
+  local result = handle:read("*a")
+  handle:close()
+
+  local json = vim.fn.json_decode(result)
+  local tables = json.tables
+
+  for _, table in pairs(tables) do
+    if table.target.schema == schema and table.target.name == table_name then
+      return open_file(table.fileName)
+    end
+  end
+end
+
 function M.compile()
   local command = "dataform compile"
   local status = os.execute(command .. " > /dev/null 2>&1")
@@ -96,4 +121,5 @@ function M.get_compiled_sql_incremental_job()
   end
 end
 
+M.go_to_ref()
 return M
