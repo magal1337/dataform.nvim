@@ -23,8 +23,7 @@ end
 
 function M.go_to_ref()
   -- Get the current line
-  --local line = vim.fn.getline('.')
-  local line = '     ${ ref("raw_gafe_salesforce","solar_design") } '
+  local line = vim.fn.getline('.')
   -- Find the position of the 'ref{' pattern
   local _, _, schema, table_name = line:find('%${%s*ref%(%s*"([^"]+)"%s*,%s*"([^"]+)"%s*%)%s*}')
   local command = "dataform compile --json"
