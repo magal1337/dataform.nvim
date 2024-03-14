@@ -53,13 +53,14 @@ function M.get_compiled_sql_job()
 
   for _, table in pairs(tables) do
     if table.fileName == M.get_dataform_definitions_file_path() then
-      local bq_command = "bq query --dry_run '''" .. table.query .. "'''"
+      local composite_query = table.preOps .. table.query .. table.postOps
+      local bq_command = "bq query --dry_run '''" .. composite_query .. "'''"
 
       local handle = io.popen(bq_command .. " 2>/dev/null")
       local result = handle:read("*a")
       handle:close()
       print(result)
-      return open_buffer_with_content(table.query)
+      return open_buffer_with_content(composite_query)
     end
   end
 end
