@@ -1,4 +1,6 @@
 local M = {}
+M.dataform_project_json = {}
+
 
 function M.get_current_file_path()
   return vim.fn.expand('%:p')
@@ -26,14 +28,9 @@ function M.go_to_ref()
   local line = vim.fn.getline('.')
   -- Find the position of the 'ref{' pattern
   local _, _, schema, table_name = line:find('%${%s*ref%(%s*"([^"]+)"%s*,%s*"([^"]+)"%s*%)%s*}')
-  local command = "dataform compile --json"
-  local handle = io.popen(command .. " 2>/dev/null")
-  local result = handle:read("*a")
-  handle:close()
 
-  local json = vim.fn.json_decode(result)
-  local df_tables = json.tables
-  local df_declarations = json.declarations
+  local df_tables = M.dataform_project_json.tables
+  local df_declarations = M.dataform_project_json.declarations
   -- union df_tables and df_declarations array to get all tables
   local tables = vim.fn.extend(df_tables, df_declarations)
 
@@ -48,6 +45,10 @@ function M.compile()
   local command = "dataform compile"
   local status = os.execute(command .. " > /dev/null 2>&1")
   if status == 0 then
+    local handle = io.popen(command .. " 2>/dev/null")
+    local result = handle:read("*a")
+    handle:close()
+    M.dataform_project_json = vim.fn.json_decode(result)
     print("Dataform compile successful.")
   else
     print("Error: Dataform compile failed.")
@@ -123,5 +124,4 @@ function M.get_compiled_sql_incremental_job()
   end
 end
 
-M.go_to_ref()
 return M
