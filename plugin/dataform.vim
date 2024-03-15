@@ -9,7 +9,7 @@
 if exists("g:loaded_dataform")
   finish
 else
-  autocmd BufReadPost *.sqlx execute "lua require('dataform').compile()"
+  autocmd BufWinEnter *.sqlx execute "lua require('dataform').compile()"
 endif
 
 let g:loaded_dataform = 1
