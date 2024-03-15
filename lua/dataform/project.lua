@@ -45,7 +45,7 @@ function M.compile()
   local command = "dataform compile"
   local status = os.execute(command .. " > /dev/null 2>&1")
   if status == 0 then
-    local handle = io.popen(command .. " 2>/dev/null")
+    local handle = io.popen(command .. " --json" .. " 2>/dev/null")
     local result = handle:read("*a")
     handle:close()
     M.dataform_project_json = vim.fn.json_decode(result)
