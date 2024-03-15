@@ -71,13 +71,7 @@ local function open_buffer_with_content(content)
 end
 
 function M.get_compiled_sql_job()
-  local command = "dataform compile --json"
-  local handle = io.popen(command .. " 2>/dev/null")
-  local result = handle:read("*a")
-  handle:close()
-
-  local json = vim.fn.json_decode(result)
-  local tables = json.tables
+  local tables = M.dataform_project_json.tables
 
   for _, table in pairs(tables) do
     if table.fileName == M.get_dataform_definitions_file_path() then
@@ -98,13 +92,7 @@ function M.get_compiled_sql_job()
 end
 
 function M.get_compiled_sql_incremental_job()
-  local command = "dataform compile --json"
-  local handle = io.popen(command .. " 2>/dev/null")
-  local result = handle:read("*a")
-  handle:close()
-
-  local json = vim.fn.json_decode(result)
-  local tables = json.tables
+  local tables = M.dataform_project_json.tables
 
   for _, table in pairs(tables) do
     if table.fileName == M.get_dataform_definitions_file_path() and table.type == "incremental" then
