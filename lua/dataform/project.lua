@@ -79,6 +79,10 @@ function M.get_compiled_sql_job()
       -- and if they are tables (arrays), select the first element
       local preOps = type(table.preOps) == "table" and table.preOps[1] or ""
       local postOps = type(table.postOps) == "table" and table.postOps[1] or ""
+
+      local preOpsClean = preOps:gsub("%s+$", "")
+      if preOpsClean:sub(-1) ~= ";" then preOps = preOps .. ";" end
+
       local composite_query = preOps .. table.query .. ";\n" .. postOps
       local bq_command = "echo " .. vim.fn.shellescape(composite_query) .. " | bq query --dry_run"
 
@@ -100,6 +104,10 @@ function M.get_compiled_sql_incremental_job()
       -- and if they are tables (arrays), select the first element
       local preOps = type(table.incrementalPreOps) == "table" and table.incrementalPreOps[1] or ""
       local postOps = type(table.incrementalPostOps) == "table" and table.incrementalPostOps[1] or ""
+
+      local preOpsClean = preOps:gsub("%s+$", "")
+      if preOpsClean:sub(-1) ~= ";" then preOps = preOps .. ";" end
+
       local composite_query = preOps .. table.incrementalQuery .. ";\n" .. postOps
       local bq_command = "echo " .. vim.fn.shellescape(composite_query) .. " | bq query --dry_run"
 
