@@ -122,7 +122,7 @@ function M.dataform_run_action_job(full_refresh)
       local action = table.target.database .. "." .. table.target.schema .. "." .. table.target.name
       local command = "dataform run --full-refresh=" .. tostring(full_refresh) .. " --actions=" .. action
       local n = os.tmpname()
-      local status = os.execute(command .. " > /dev/null 2>&1 " .. n)
+      local status = os.execute(command .. " > " .. n .. " 2>&1")
       -- read file n as text
       local f = io.open(n, "r")
       local content = f:read("*all")
