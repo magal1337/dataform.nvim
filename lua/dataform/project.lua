@@ -138,4 +138,30 @@ function M.dataform_run_action_job(full_refresh)
   end
 end
 
+function M.dataform_run_action_assertions()
+  local assertions = M.dataform_project_json.assertions
+  local target_assertions = {}
+  for _, assertion in pairs(assertions) do
+    if assertion.fileName == M.get_dataform_definitions_file_path() then
+      local action = assertion.target.database .. "." .. assertion.target.schema .. "." .. assertion.target.name
+      table.insert(target_assertions, action)
+    end
+  end
+  -- union all table elements as a single string separeted by ','
+  local final_actions = table.concat(target_assertions, ",")
+  local command = "dataform run " .. "--actions=" .. final_actions
+  local n = os.tmpname()
+  local status = os.execute(command .. " > " .. n .. " 2>&1")
+  -- read file n as text
+  local f = io.open(n, "r")
+  local content = f:read("*all")
+  f:close()
+  os.remove(n)
+  if status == 0 then
+    return print("Dataform assertions executed successfully.")
+  else
+    return print("Error: Dataform assertions failed. \n\n" .. content)
+  end
+end
+
 return M
