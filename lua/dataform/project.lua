@@ -123,7 +123,7 @@ function M.dataform_run_action_job(full_refresh)
       local command = "dataform run --full-refresh=" .. tostring(full_refresh) .. " --actions=" .. action
       local status = os.execute(command .. " 2>/dev/null")
 
-      if stattus == 0 then
+      if status == 0 then
         return print("Dataform run executed successfully.")
       else
         return print("Error: Dataform run failed.")
