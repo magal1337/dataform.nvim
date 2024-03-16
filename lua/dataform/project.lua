@@ -123,9 +123,12 @@ function M.dataform_run_action_job(full_refresh)
       local command = "dataform run --full-refresh=" .. tostring(full_refresh) .. " --actions=" .. action
       local handle = io.popen(command .. " 2>/dev/null")
       local result = handle:read("*a")
-      status = handle:close()
+      local rc = { handle:close() }
 
-      if status == true then
+      print(rc[1])
+      print(rc[3])
+
+      if rc[3] == 0 then
         return print("Dataform ran successfully.")
       else
         return print("Error: Dataform run failed... \n\n " .. result)
