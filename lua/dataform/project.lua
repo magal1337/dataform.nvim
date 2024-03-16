@@ -125,7 +125,7 @@ function M.dataform_run_action_job(full_refresh)
       local result = handle:read("*a")
       status = handle:close()
 
-      if status == 0 then
+      if status == true then
         return print("Dataform ran successfully.")
       else
         return print("Error: Dataform run failed... \n\n " .. result)
