@@ -120,7 +120,7 @@ function M.dataform_run_action_job(full_refresh)
   for _, table in pairs(tables) do
     if table.fileName == M.get_dataform_definitions_file_path() then
       local action = table.target.database .. "." .. table.target.schema .. "." .. table.target.name
-      local command = "dataform run --full-refresh=" .. full_refresh .. " --actions=" .. action
+      local command = "dataform run --full-refresh=" .. tostring(full_refresh) .. " --actions=" .. action
       local handle = io.popen(command .. " 2>/dev/null")
       local result = handle:read("*a")
       status = handle:close()
