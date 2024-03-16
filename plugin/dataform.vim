@@ -20,3 +20,10 @@ endif
 "let s:lua_rocks_deps_loc =  expand("<sfile>:h") . "/deps"
 "exe "lua package.path = package.path .. ';' .. s:lua_rocks_deps_loc .. '/?.lua'"
 autocmd BufWritePost *.sqlx execute "lua require('dataform').compile()"
+
+command! -nargs=0 DataformCompileFull lua require('dataform').get_compiled_sql_job()
+command! -nargs=0 DataformCompileIncremental lua require('dataform').get_compiled_sql_incremental_job()
+command! -nargs=0 DataformGoToRef lua require('dataform').go_to_ref()
+command! -nargs=0 DataformRunActionIncremental lua require('dataform').dataform_run_action_job()
+command! -nargs=0 DataformRunAction lua require('dataform').dataform_run_action_job(true)
+command! -nargs=0 DataformRunAssertions lua require('dataform').dataform_run_action_assertions()
