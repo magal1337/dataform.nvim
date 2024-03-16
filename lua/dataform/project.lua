@@ -112,18 +112,24 @@ function M.get_compiled_sql_incremental_job()
   end
 end
 
-function M.dataform_run_action_job()
+function M.dataform_run_action_job(full_refresh)
+  local full_refresh = full_refresh or false
   local df_tables = M.dataform_project_json.tables
   local df_operations = M.dataform_project_json.operations
   local tables = vim.fn.extend(df_tables, df_operations)
   for _, table in pairs(tables) do
     if table.fileName == M.get_dataform_definitions_file_path() then
       local action = table.target.database .. "." .. table.target.schema .. "." .. table.target.name
-      local command = "dataform run --actions=" .. action
+      local command = "dataform run --full-refresh=" .. full_refresh .. " --actions=" .. action
       local handle = io.popen(command .. " 2>/dev/null")
       local result = handle:read("*a")
-      handle:close()
-      return print(result)
+      status = handle:close()
+
+      if status == 0 then
+        return print("Dataform ran successfully.")
+      else
+        return print("Error: Dataform run failed... \n\n " .. result)
+      end
     end
   end
 end
