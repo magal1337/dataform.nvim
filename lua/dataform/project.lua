@@ -1,3 +1,4 @@
+vim.notify = require("notify")
 local M = {}
 M.dataform_project_json = {}
 
@@ -49,13 +50,13 @@ function M.compile()
     local result = handle:read("*a")
     handle:close()
     M.dataform_project_json = vim.fn.json_decode(result)
-    print("Dataform compile successful.")
+    vim.notify("Dataform compile successful.", "info")
   else
-    print("Error: Dataform compile failed.")
+    vim.notify("Error: Dataform compile failed.", "error")
     local handle = io.popen(command .. " 2>&1")
     local result = handle:read("*a")
     handle:close()
-    print(result)
+    vim.notify(result, "error")
   end
 end
 
@@ -89,7 +90,7 @@ function M.get_compiled_sql_job()
       local handle = io.popen(bq_command .. " 2>/dev/null")
       local result = handle:read("*a")
       handle:close()
-      print(result)
+      vim.notify(result, "warning")
       return open_buffer_with_content(composite_query)
     end
   end
@@ -114,7 +115,7 @@ function M.get_compiled_sql_incremental_job()
       local handle = io.popen(bq_command .. " 2>/dev/null")
       local result = handle:read("*a")
       handle:close()
-      print(result)
+      vim.notify(result, "warning")
       return open_buffer_with_content(composite_query)
     end
   end
@@ -137,9 +138,9 @@ function M.dataform_run_action_job(full_refresh)
       f:close()
 
       if status == 0 then
-        return print("Dataform run executed successfully.")
+        return vim.notify("Dataform run executed successfully.", "info")
       else
-        return print("Error: Dataform run failed. \n\n" .. content)
+        return vim.notify("Error: Dataform run failed. \n\n" .. content, "error")
       end
       os.remove(n)
     end
@@ -166,9 +167,9 @@ function M.dataform_run_action_assertions()
   f:close()
   os.remove(n)
   if status == 0 then
-    return print("Dataform assertions executed successfully.")
+    return vim.notify("Dataform assertions executed successfully.", "info")
   else
-    return print("Error: Dataform assertions failed. \n\n" .. content)
+    return vim.notify("Error: Dataform assertions failed. \n\n" .. content, "error")
   end
 end
 
