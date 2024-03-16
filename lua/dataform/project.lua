@@ -121,9 +121,17 @@ function M.dataform_run_action_job(full_refresh)
     if table.fileName == M.get_dataform_definitions_file_path() then
       local action = table.target.database .. "." .. table.target.schema .. "." .. table.target.name
       local command = "dataform run --full-refresh=" .. tostring(full_refresh) .. " --actions=" .. action
-      local status = os.execute(command .. " 2>/dev/null")
+      --local status = os.execute(command .. " 2>/dev/null")
 
-      if status == 0 then
+      local handle = io.popen(command .. " 2>/dev/null")
+      local result = handle:read("*all")
+      local status = { handle:close() }
+      print(status[0])
+      print(status[1])
+      print(status[2])
+      print(status[3])
+
+      if status[3] == true then
         return print("Dataform run executed successfully.")
       else
         return print("Error: Dataform run failed.")
