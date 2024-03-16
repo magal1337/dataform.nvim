@@ -50,13 +50,13 @@ function M.compile()
     local result = handle:read("*a")
     handle:close()
     M.dataform_project_json = vim.fn.json_decode(result)
-    vim.notify("Dataform compile successful.", 3)
+    vim.notify("Dataform compile successful.", 2)
   else
-    vim.notify("Error: Dataform compile failed.", 1)
+    vim.notify("Error: Dataform compile failed.", 4)
     local handle = io.popen(command .. " 2>&1")
     local result = handle:read("*a")
     handle:close()
-    vim.notify(result, 1)
+    vim.notify(result, 4)
   end
 end
 
@@ -82,7 +82,7 @@ function M.get_compiled_sql_job()
       local postOps = type(table.postOps) == "table" and table.postOps[1] or ""
 
       local preOpsClean = preOps:gsub("%s+$", "")
-      if preOpsClean:sub(-1) ~= ";" and preOps ~= nil then preOps = preOps .. ";" end
+      if preOpsClean:sub(-1) ~= ";" and preOps ~= "" then preOps = preOps .. ";" end
 
       local composite_query = preOps .. table.query .. ";\n" .. postOps
       local bq_command = "echo " .. vim.fn.shellescape(composite_query) .. " | bq query --dry_run"
@@ -90,7 +90,7 @@ function M.get_compiled_sql_job()
       local handle = io.popen(bq_command .. " 2>/dev/null")
       local result = handle:read("*a")
       handle:close()
-      vim.notify(result, 2)
+      vim.notify(result, 3)
       return open_buffer_with_content(composite_query)
     end
   end
@@ -107,7 +107,7 @@ function M.get_compiled_sql_incremental_job()
       local postOps = type(table.incrementalPostOps) == "table" and table.incrementalPostOps[1] or ""
 
       local preOpsClean = preOps:gsub("%s+$", "")
-      if preOpsClean:sub(-1) ~= ";" then preOps = preOps .. ";" end
+      if preOpsClean:sub(-1) ~= ";" and preOps ~= "" then preOps = preOps .. ";" end
 
       local composite_query = preOps .. table.incrementalQuery .. ";\n" .. postOps
       local bq_command = "echo " .. vim.fn.shellescape(composite_query) .. " | bq query --dry_run"
@@ -115,7 +115,7 @@ function M.get_compiled_sql_incremental_job()
       local handle = io.popen(bq_command .. " 2>/dev/null")
       local result = handle:read("*a")
       handle:close()
-      vim.notify(result, 2)
+      vim.notify(result, 3)
       return open_buffer_with_content(composite_query)
     end
   end
@@ -138,9 +138,9 @@ function M.dataform_run_action_job(full_refresh)
       f:close()
 
       if status == 0 then
-        return vim.notify("Dataform run executed successfully.", 3)
+        return vim.notify("Dataform run executed successfully.", 2)
       else
-        return vim.notify("Error: Dataform run failed. \n\n" .. content, 1)
+        return vim.notify("Error: Dataform run failed. \n\n" .. content, 4)
       end
       os.remove(n)
     end
@@ -167,9 +167,9 @@ function M.dataform_run_action_assertions()
   f:close()
   os.remove(n)
   if status == 0 then
-    return vim.notify("Dataform assertions executed successfully.", 3)
+    return vim.notify("Dataform assertions executed successfully.", 2)
   else
-    return vim.notify("Error: Dataform assertions failed. \n\n" .. content, 1)
+    return vim.notify("Error: Dataform assertions failed. \n\n" .. content, 4)
   end
 end
 
