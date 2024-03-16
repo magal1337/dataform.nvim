@@ -123,11 +123,15 @@ function M.dataform_run_action_job(full_refresh)
       local command = "dataform run --full-refresh=" .. tostring(full_refresh) .. " --actions=" .. action
       local n = os.tmpname()
       local status = os.execute(command .. " > " .. n)
+      -- read file n as text
+      local f = io.open(n, "r")
+      local content = f:read("*all")
+      f:close()
 
       if status == 0 then
         return print("Dataform run executed successfully.")
       else
-        return print("Error: Dataform run failed. \n\n" .. n)
+        return print("Error: Dataform run failed. \n\n" .. content)
       end
       os.remove(n)
     end
