@@ -121,6 +121,40 @@ function M.get_compiled_sql_incremental_job()
   end
 end
 
+function M.dataform_run_all()
+  local command = "dataform run"
+  local n = os.tmpname()
+  local status = os.execute(command .. " > " .. n .. " 2>&1")
+  -- read file n as text
+  local f = io.open(n, "r")
+  local content = f:read("*all")
+  f:close()
+  os.remove(n)
+  if status == 0 then
+    return vim.notify("Dataform run executed successfully.", 2)
+  else
+    return vim.notify("Error: Dataform run failed. \n\n" .. content, 4)
+  end
+end
+
+function M.dataform_run_tag(args)
+  local tag = args[1]
+  local command = "dataform run --tags=" .. tag
+  local n = os.tmpname()
+  local status = os.execute(command .. " > " .. n .. " 2>&1")
+  -- read file n as text
+  local f = io.open(n, "r")
+  local content = f:read("*all")
+  f:close()
+  os.remove(n)
+
+  if status == 0 then
+    return vim.notify("Dataform tag run executed successfully.", 2)
+  else
+    return vim.notify("Error: Dataform tag run failed. \n\n" .. content, 4)
+  end
+end
+
 function M.dataform_run_action_job(full_refresh)
   local full_refresh = full_refresh or false
   local df_tables = M.dataform_project_json.tables
