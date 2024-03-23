@@ -28,4 +28,4 @@ command! -nargs=0 DataformRunActionIncremental lua require('dataform').dataform_
 command! -nargs=0 DataformRunAction lua require('dataform').dataform_run_action_job(true)
 command! -nargs=0 DataformRunAll lua require('dataform').dataform_run_all()
 command! -nargs=0 DataformRunAssertions lua require('dataform').dataform_run_action_assertions()
-command! -nargs=1 DataformRunTag lua require('dataform').dataform_run_tag(<f-args>)
+command! -nargs=1 DataformRunTag lua require('dataform').dataform_run_tag(<args>)

@@ -138,7 +138,7 @@ function M.dataform_run_all()
 end
 
 function M.dataform_run_tag(args)
-  local tag = args[1]
+  local tag = args
   local command = "dataform run --tags=" .. tag
   local n = os.tmpname()
   local status = os.execute(command .. " > " .. n .. " 2>&1")
