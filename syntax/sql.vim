@@ -17,9 +17,16 @@ syn keyword sqlFunction array_agg array_concat array_contains array_length
 syn keyword sqlFunction array_reverse array_to_string array_concat_agg
 
 " Operators
+syn keyword sqlOperator all and any
+syn keyword sqlOperator between
+syn keyword sqlOperator distinct
+syn keyword sqlOperator exists
+syn keyword sqlOperator in intersect is isnull
+syn keyword sqlOperator not
+syn keyword sqlOperator pivot
+syn keyword sqlOperator tamblesample
+syn keyword sqlOperator union unnest unpivot
 
-" Numbers
-syn match sqlNumber /\v\d+(\.\d+)?/
 
 " Strings
 syn region sqlString start=+"+ end=+"+ keepend contains=@sqlStringGroup
@@ -31,7 +38,7 @@ syn match sqlComment "--.*" contains=@Spell
 " Highlighting
 hi def link sqlKeyword Keyword
 hi def link sqlFunction Function
-"hi def link sqlOperator Operator
+hi def link sqlOperator Operator
 hi def link sqlNumber Number
 hi def link sqlString String
 hi def link sqlComment Comment
