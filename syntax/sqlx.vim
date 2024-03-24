@@ -11,7 +11,7 @@ hi link sqlx sql
 " Define configblock syntax highlighting
 syntax region sqlxConfigBlock matchgroup=sqlxBlocks start="^\s*config\s*{" end="}" contains=@javascript keepend fold extend
 syntax region sqlxJsBlock matchgroup=sqlxBlocks start="^\s*js\s*{" end="}" contains=@javascript keepend fold extend
-syntax region sqlxInlineJs matchgroup=sqlxBlocks start="\${" end="}" contains=@javascript
+syntax region sqlxInlineJs matchgroup=sqlxBlocks start="\${" end="}" contains=@javascript keepend fold extend
 hi link sqlxBlocks Special
 
 " Set the file type for .sqlx files
