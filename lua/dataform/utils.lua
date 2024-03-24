@@ -9,9 +9,11 @@ function utils.open_file(file_path)
   vim.cmd("edit " .. file_path)
 end
 
-function utils.os_execute_with_status(command)
+function utils.os_execute_with_status(command, json_output)
+  local is_json = json_output or false
+  local handle_stdout = is_json and " 2>/dev/null" or " 2>&1"
   local n = os.tmpname()
-  local status = os.execute(command .. " > " .. n .. " 2>&1")
+  local status = os.execute(command .. " > " .. n .. handle_stdout)
   local f = io.open(n, "r")
   local content = f:read("*all")
   f:close()
