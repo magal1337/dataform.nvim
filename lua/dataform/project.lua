@@ -43,8 +43,7 @@ function dataform.compile()
     dataform.compiled_project_table = vim.fn.json_decode(content_json)
     vim.notify("Dataform compile successful.", 2)
   else
-    vim.notify("Error: Dataform compile failed.", 4)
-    vim.notify(content, 4)
+    vim.notify("Error: Dataform compile failed. \n\n" .. content, 4)
   end
 end
 
