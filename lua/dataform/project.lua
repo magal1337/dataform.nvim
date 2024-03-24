@@ -79,8 +79,8 @@ function dataform.run_all()
   return vim.notify("Error: Dataform run failed. \n\n" .. content, 4)
 end
 
-function dataform.run_tag(tags)
-  local tags = '*' or tags
+function dataform.run_tag(args)
+  local tags = '*' or args
   local command = "dataform run --tags=" .. tags
   local status, content = utils.os_execute_with_status(command)
   if status == 0 then
