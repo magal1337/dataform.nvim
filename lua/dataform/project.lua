@@ -36,7 +36,11 @@ function dataform.compile()
   local command = "dataform compile --json"
   local status, content = utils.os_execute_with_status(command)
   if status == 0 then
-    dataform.compiled_project_table = vim.fn.json_decode(content)
+    -- get only json part inside content
+    local json_start_index = content:find("{")
+    local content_json = content:sub(json_start_index)
+
+    dataform.compiled_project_table = vim.fn.json_decode(content_json)
     vim.notify("Dataform compile successful.", 2)
   else
     vim.notify("Error: Dataform compile failed.", 4)

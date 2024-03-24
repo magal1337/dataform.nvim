@@ -11,7 +11,7 @@ end
 
 function utils.os_execute_with_status(command)
   local n = os.tmpname()
-  local status = os.execute(command .. " > " .. n .. " 2>/dev/null")
+  local status = os.execute(command .. " > " .. n .. " 2>&1")
   local f = io.open(n, "r")
   local content = f:read("*all")
   f:close()
