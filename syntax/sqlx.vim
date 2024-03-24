@@ -1,12 +1,12 @@
 " Define SQL syntax highlighting
-syntax include @sql syntax/sql.vim
+syn include @sql syntax/sql.vim
 
 " Define JavaScript syntax highlighting
-syntax include @javascript syntax/javascript.vim
+syn include @javascript syntax/javascript.vim
 
 " Define configblock syntax highlighting
 syntax region sqlxConfigBlock start="^\s*config\s*{" end="}" contains=@javascript
-hi link sqlxConfigBlock Statement
+hi def link sqlxConfigBlock Statement
 
 " Define jsblock syntax highlighting
 syntax region sqlxJsBlock start="^\s*js\s*{" end="}" contains=@javascript
