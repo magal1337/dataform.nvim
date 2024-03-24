@@ -9,28 +9,11 @@ syntax match sqlx ".*" contains=@sql
 hi link sqlx sql
 
 " Define configblock syntax highlighting
-syntax region sqlxConfigBlock start="^\s*config\s*{" end="}" contains=@javascript keepend fold extend
-hi link sqlxConfigBlock Special
-
-" Define jsblock syntax highlighting
-syntax region sqlxJsBlock start="^\s*js\s*{" end="}" contains=@javascript
-hi link sqlxJsBlock Statement
-
-" Define inlinejs syntax highlighting
-syntax region sqlxInlineJs start="\${" end="}" contains=@javascript
-hi link sqlxInlineJs Statement
-
-" Link JavaScript scope to JavaScript syntax
-hi link sqlxJsBlock javaScript
-
-" Link configblock scope to JavaScript syntax
-hi link sqlxConfigBlock javaScript
-
-" Link inlinejs scope to JavaScript syntax
-hi link sqlxInlineJs javaScript
+syntax region sqlxConfigBlock matchgroup=sqlxBlocks start="^\s*config\s*{" end="}" contains=@javascript keepend fold extend
+syntax region sqlxJsBlock matchgroup=sqlxBlocks start="^\s*js\s*{" end="}" contains=@javascript keepend fold extend
+syntax region sqlxInlineJs matchgroup=sqlxBlocks start="\${" end="}" contains=@javascript
+hi link sqlxBlocks Special
 
 " Set the file type for .sqlx files
 autocmd BufNewFile,BufRead *.sqlx set filetype=sqlx
 
-" Define custom highlight groups
-highlight Statement ctermfg=yellow guifg=yellow
