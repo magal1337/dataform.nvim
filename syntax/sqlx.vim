@@ -14,9 +14,9 @@ hi link sqlx sql
 " syntax region sqlxInlineJs matchgroup=sqlxBlocks start="\${" end="}" contains=@javascript keepend fold extend
 "hi link sqlxBlocks Special
 
-syntax region sqlxConfigBlock start="^\s*config\s*{" end="}" contained transparent contains=@sqlxConfigInnerBlock,javascript
+syntax region sqlxConfigBlock start="^\s*config\s*{" end="}" contained transparent contains=@sqlxConfigInnerBlock
 
-syntax region sqlxConfigInnerBlock start="{" end="}" contained transparent contains=@sqlxConfigInnerBlock,sqlxConfigKeyValue,sqlxConfigString, javascript
+syntax region sqlxConfigInnerBlock start="{" end="}" contained transparent contains=@sqlxConfigInnerBlock,sqlxConfigKeyValue,sqlxConfigString
 
 syntax match sqlxConfigKeyValue /\v\s*\zs\w+\ze\s*:/
 syntax match sqlxConfigString /\v".*?"/
