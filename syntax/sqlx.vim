@@ -28,9 +28,3 @@ hi link sqlxConfigBlock javaScript
 
 " Link inlinejs scope to JavaScript syntax
 hi link sqlxInlineJs javaScript
-
-" Set the file type for .sqlx files
-autocmd BufNewFile,BufRead *.sqlx set filetype=sqlx
-
-" Define custom highlight groups
-highlight Statement ctermfg=yellow guifg=yellow
