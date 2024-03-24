@@ -1,5 +1,5 @@
 vim.notify = require("notify")
-local utils = require("dataform.utils.utils")
+local utils = require("dataform.utils")
 
 local dataform = {}
 dataform.compiled_project_table = {}
