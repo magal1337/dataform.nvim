@@ -80,7 +80,7 @@ function dataform.run_all()
 end
 
 function dataform.run_tag(args)
-  local tags = args or "*"
+  local tags = args or ""
   local command = "dataform run --tags=" .. tags
   local status, content = utils.os_execute_with_status(command)
   if status == 0 then
