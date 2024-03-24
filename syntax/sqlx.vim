@@ -9,8 +9,8 @@ syntax match sqlx ".*" contains=@sql
 hi link sqlx sql
 
 " Define configblock syntax highlighting
-syntax region sqlxConfigBlock start="^\s*config\s*{" end="}" contains=@javascript
-hi link sqlxConfigBlock Statement
+syntax region sqlxConfigBlock start="^\s*config\s*{" end="}" contains=@javascript keepend fold extend
+hi link sqlxConfigBlock Special
 
 " Define jsblock syntax highlighting
 syntax region sqlxJsBlock start="^\s*js\s*{" end="}" contains=@javascript
