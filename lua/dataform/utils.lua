@@ -26,3 +26,5 @@ function utils.open_buffer_with_content(content)
   vim.api.nvim_command("split")
   vim.api.nvim_win_set_buf(0, bufnr)
 end
+
+return utils
