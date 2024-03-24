@@ -25,10 +25,6 @@ hi link sqlxJsBlock Statement
 syntax region sqlxInlineJs start="\${" end="}" contains=@javascript
 hi link sqlxInlineJs Statement
 
-" Link sqlx scope to SQL syntax
-syntax match sqlx ".*" contained
-hi link sqlx sql
-
 " Link JavaScript scope to JavaScript syntax
 hi link sqlxJsBlock javaScript
 
