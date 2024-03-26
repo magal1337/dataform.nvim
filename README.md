@@ -57,9 +57,9 @@ And also every time that you edit your `.sqlx` file, and hit `:w` it will recomp
 |`:DataformRunAssertions`| Will run the current model assertions. ||
 
 🔮 It's recommended to use these commands encapsulated in some custom keymaps to make it more convenient. Choose what suits you best.
-## Syntax Highlight
+## 📖 Syntax Highlight
 ✨ Still under development...
-## How to contribute
+## 🏰 How to contribute
 To know more on how to contribute please check our [Contributing Guide](https://github.com/magal1337/dataform.nvim/blob/main/CONTRIBUTING.md)
 ## 🙏 Thanks adventurer 🧙‍♀️
 Like this Plugin? Star it on [GitHub](https://github.com/magal1337/dataform.nvim)
