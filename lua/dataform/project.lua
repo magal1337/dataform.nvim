@@ -19,7 +19,7 @@ end
 
 function dataform.go_to_ref()
   local line = vim.fn.getline('.')
-  local _, _, schema, table_name = line:find('%${%s*ref%(%s*"([^"]+)"%s*,%s*"([^"]+)"%s*%)%s*}')
+  local _, _, schema, table_name = line:find('%${%s*ref%(%s*["\']([^"]+)["\']%s*,%s*["\']([^"]+)["\']%s*%)%s*}')
 
   local df_tables = dataform.compiled_project_table.tables
   local df_declarations = dataform.compiled_project_table.declarations
