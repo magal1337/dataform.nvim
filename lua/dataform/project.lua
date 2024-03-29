@@ -14,7 +14,7 @@ local function get_dataform_definitions_file_path()
   if is_match then
     return "definitions/" .. dataform_path
   end
-  return vim.notify("Error: File does not exist inside a dataform definitions folder.", 4)
+  return vim.notify("Error: File does not exist inside dataform definitions folder.", 4)
 end
 
 function dataform.go_to_ref()
@@ -37,7 +37,7 @@ function dataform.compile()
   local status, content = utils.os_execute_with_status(command .. " --json", true)
   if status == 0 then
     dataform.compiled_project_table = vim.fn.json_decode(content)
-    vim.notify("Dataform compile successful.", 2)
+    vim.notify("Dataform compiled successfully.", 2)
   else
     local _, content_error = utils.os_execute_with_status(command)
     vim.notify("Error: Dataform compile failed. \n\n" .. content_error, 4)
