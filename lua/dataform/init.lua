@@ -4,6 +4,7 @@ local M = {}
 
 -- Routes calls made to this module to functions in the
 -- plugin's other modules.
+M.set_dataform_workdir_project_path = dataform.set_dataform_workdir_project_path
 M.compile = dataform.compile
 M.get_compiled_sql_job = dataform.get_compiled_sql_job
 M.go_to_ref = dataform.go_to_ref

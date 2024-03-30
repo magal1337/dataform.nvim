@@ -10,6 +10,7 @@ let current_file_extension = fnamemodify(expand("%"), ":e")
 if exists("g:loaded_dataform")
   finish
 elseif (current_file_extension == "sqlx")
+  lua require('dataform').set_dataform_workdir_project_path()
   lua require('dataform').compile()
   let g:loaded_dataform = 1
 endif
