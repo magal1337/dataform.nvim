@@ -13,7 +13,7 @@ function dataform.set_dataform_workdir_project_path()
     local project_path = current_path:sub(1, -string.len(pattern) - 1)
     vim.api.nvim_set_current_dir(project_path)
     local stat = vim.loop.fs_stat(project_path .. "/dataform.json")
-    if ! stat then
+    if not stat then
       return vim.notify("Error: dataform.json does not exist.", 4)
     end
   else
