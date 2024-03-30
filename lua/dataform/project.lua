@@ -11,10 +11,6 @@ function dataform.set_dataform_workdir_project_path()
 
   if parent_path then
     vim.api.nvim_set_current_dir(parent_path)
-    local stat = vim.loop.fs_stat(parent_path .. "dataform.json")
-    if not stat then
-      return vim.notify("Error: dataform.json does not exist.", 4)
-    end
   else
     return vim.notify("Error: File does not exist inside dataform definitions folder.", 4)
   end
