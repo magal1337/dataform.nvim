@@ -6,13 +6,12 @@ dataform.compiled_project_table = {}
 
 function dataform.set_dataform_workdir_project_path()
   local current_path = utils.get_current_file_path()
-  local pattern = ".*/definitions/"
-  local is_match = string.match(current_path, pattern)
+  local parent_path = current_path:match("(.*/definitions)/")
+  parent_path = parent_path and parent_path .. "/" or nil
 
-  if is_match then
-    local project_path = current_path:sub(1, -string.len(pattern) - 1)
-    vim.api.nvim_set_current_dir(project_path)
-    local stat = vim.loop.fs_stat(project_path .. "/dataform.json")
+  if parent_path then
+    vim.api.nvim_set_current_dir(parent_path)
+    local stat = vim.loop.fs_stat(parent_path .. "dataform.json")
     if not stat then
       return vim.notify("Error: dataform.json does not exist.", 4)
     end
