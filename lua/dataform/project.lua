@@ -4,6 +4,17 @@ local utils = require("dataform.utils")
 local dataform = {}
 dataform.compiled_project_table = {}
 
+function dataform.set_dataform_workdir_project_path()
+  local current_path = utils.get_current_file_path()
+  local is_match = string.match(current_path, "/definitions/.*")
+
+  if is_match then
+    local parent_path = current_path:gsub("/definitions/.*", "/")
+    vim.api.nvim_set_current_dir(parent_path)
+  else
+    return vim.notify("Error: File does not exist inside dataform definitions folder.", 4)
+  end
+end
 
 local function get_dataform_definitions_file_path()
   local file = utils.get_current_file_path()
