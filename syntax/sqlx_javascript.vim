@@ -1,7 +1,7 @@
 " Vim syntax file
 " Language: SQLX
 " Maintainer: Andres Lowrie
-" Repository: https://github.com/andres-lowrie/vim-sqlx
+" Repository: https://github.com/magal1337/dataform.nvim
 " License: VIM
 " Credits: https://github.com/pangloss/vim-javascript
 "
