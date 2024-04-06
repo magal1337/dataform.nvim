@@ -16,6 +16,7 @@
 - Run current dataform model assertions
 - Run entire dataform project
 - Run dataform specific tag
+- Syntax highlighting for both sql and javascript blocks
 
 ## 📜 Requirements
 
@@ -58,6 +59,11 @@ And also every time that you edit your `.sqlx` file, and hit `:w` it will recomp
 
 🔮 It's recommended to use these commands encapsulated in some custom keymaps to make it more convenient. Choose what suits you best.
 ## 📖 Syntax Highlight
+From a syntax perspective sqlx acts like a combination of `sql` and `js` and the aim of this project is to support both syntaxes in parody with how [Dataform](https://github.com/dataform-co/dataform) uses them, more precisely:
+
+- The javascript supported by NodeJs
+- The sql supported by BigQuery
+
 ✨ Still under development...
 ## 🏰 How to contribute
 To know more on how to contribute please check our [Contributing Guide](https://github.com/magal1337/dataform.nvim/blob/main/CONTRIBUTING.md)
