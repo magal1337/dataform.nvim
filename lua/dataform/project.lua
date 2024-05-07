@@ -142,7 +142,7 @@ function dataform.run_assertions_job()
     local status, content = utils.os_execute_with_status(command)
 
     if status == 0 then
-      vim.notify("Dataform assertion" .. assertion .. " executed successfully.", 2)
+      vim.notify("Dataform assertion \n" .. assertion .. "\n executed successfully.", 2)
     else
       vim.notify("Error: Dataform assertions failed. \n\n" .. content, 4)
     end
