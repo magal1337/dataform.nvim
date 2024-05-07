@@ -136,16 +136,17 @@ function dataform.run_assertions_job()
   if vim.tbl_isempty(target_assertions) then
     return vim.notify("Error: There is no assertions for this file.", 4)
   end
-  -- union all table elements as a single string separeted by ','
-  local final_actions = table.concat(target_assertions, ",")
-  local command = "dataform run " .. "--actions=" .. final_actions
 
-  local status, content = utils.os_execute_with_status(command)
+  for _, assertion in pairs(target_assertions) do
+    local command = "dataform run " .. "--actions=" .. assertion
+    local status, content = utils.os_execute_with_status(command)
 
-  if status == 0 then
-    return vim.notify("Dataform assertions executed successfully.", 2)
+    if status == 0 then
+      vim.notify("Dataform assertion: \n" .. assertion .. "\nexecuted successfully.", 2)
+    else
+      vim.notify("Error: Dataform assertions failed. \n\n" .. content, 4)
+    end
   end
-  return vim.notify("Error: Dataform assertions failed. \n\n" .. content, 4)
 end
 
 return dataform
