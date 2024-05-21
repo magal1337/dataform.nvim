@@ -8,27 +8,20 @@
 " variable and continue running this instance of the plugin.
 
 let g:loaded_dataform = 0
-" Create an autocommand group
+
 augroup CompileSQLX
   autocmd!
-  " Call the HandleSQLXEvent function on BufNewFile and BufRead for .sqlx files
   autocmd BufNewFile,BufRead *.sqlx setfiletype sqlx | call s:HandleSQLXEvent()
 augroup END
 
-" Define the function to handle the SQLX event
 function! s:HandleSQLXEvent()
-  " Check if the compile function has been triggered
   if g:loaded_dataform == 0
-    " Call the Lua functions
     lua require('dataform').set_dataform_workdir_project_path()
     lua require('dataform').compile()
-    " Set the loaded_dataform variable to 1
     let g:loaded_dataform = 1
   endif
 endfunction
 
-
-autocmd BufNewFile,BufRead *.sqlx setfiletype sqlx
 autocmd BufWritePost *.sqlx execute "lua require('dataform').compile()"
 
 command! -nargs=0 DataformCompileFull lua require('dataform').get_compiled_sql_job()
