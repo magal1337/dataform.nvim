@@ -12,7 +12,7 @@ let g:loaded_dataform = 0
 augroup CompileSQLX
   autocmd!
   " Call the HandleSQLXEvent function on BufNewFile and BufRead for .sqlx files
-  autocmd BufNewFile,BufRead *.sqlx call s:HandleSQLXEvent()
+  autocmd BufNewFile,BufRead *.sqlx setfiletype sqlx | call s:HandleSQLXEvent()
 augroup END
 
 " Define the function to handle the SQLX event
@@ -24,8 +24,6 @@ function! s:HandleSQLXEvent()
     lua require('dataform').compile()
     " Set the loaded_dataform variable to 1
     let g:loaded_dataform = 1
-    " Set the filetype to sqlx
-    setfiletype sqlx
   endif
 endfunction
 
