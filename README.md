@@ -34,9 +34,6 @@ use {
   requires = {
     'rcarriga/nvim-notify',
   },
-  config = function ()
-    require"dataform".setup()
-  end
 }
 ```
 
