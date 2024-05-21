@@ -29,6 +29,8 @@ function! s:HandleSQLXEvent()
   endif
 endfunction
 
+
+autocmd BufNewFile,BufRead *.sqlx setfiletype sqlx
 autocmd BufWritePost *.sqlx execute "lua require('dataform').compile()"
 
 command! -nargs=0 DataformCompileFull lua require('dataform').get_compiled_sql_job()
