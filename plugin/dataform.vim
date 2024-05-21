@@ -10,14 +10,7 @@ let g:loaded_dataform = 0
 
 augroup CompileSQLX
   autocmd!
-  autocmd BufNewFile,BufRead *.sqlx execute '
-    \ if g:compile_triggered == 0 |
-    \   lua require("dataform").set_dataform_workdir_project_path() |
-    \   lua require("dataform").compile() |
-    \   let g:compile_triggered = 1 |
-    \   setfiletype sqlx |
-    \ endif
-  '
+  autocmd BufNewFile,BufRead *.sqlx if g:loaded_dataform == 0 | lua require("dataform").set_dataform_workdir_project_path() | lua require('dataform').compile() | let g:loaded_dataform = 1 | setfiletype sqlx | endif
 augroup END
 
 autocmd BufWritePost *.sqlx execute "lua require('dataform').compile()"
