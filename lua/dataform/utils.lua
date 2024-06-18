@@ -41,7 +41,11 @@ function utils.custom_picker(prompt_name, custom_file_paths)
     finder = finders.new_table {
       results = custom_file_paths,
     },
-    previewer = true,
+    previewer = previewers.new_termopen_previewer({
+      get_command = function(entry)
+        return { "vim", entry.value }
+      end,
+    }),
     sorter = conf.generic_sorter({}),
   }):find()
 end
