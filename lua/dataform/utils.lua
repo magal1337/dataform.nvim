@@ -36,10 +36,11 @@ end
 
 function utils.custom_picker(prompt_name, custom_file_paths)
   vim.print(custom_file_paths)
+  test_file = "definitions/insight/insight_gafe_delta_api/inverter_error_summary_15min.sqlx"
   pickers.new({}, {
     prompt_title = prompt_name,
     finder = finders.new_table {
-      results = custom_file_paths,
+      results = test_file,
     },
     sorter = sorters.get_generic_fuzzy_sorter(),
     attach_mappings = function(_, map)
