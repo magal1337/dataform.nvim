@@ -3,7 +3,7 @@ local action_state = require('telescope.actions.state')
 local pickers = require('telescope.pickers')
 local finders = require('telescope.finders')
 local sorters = require('telescope.sorters')
-
+local conf = require("telescope.config").values
 local utils = {}
 
 function utils.get_current_file_path()
@@ -38,14 +38,14 @@ function utils.custom_picker(prompt_name, custom_file_paths)
   vim.print(custom_file_paths)
   local test_file = {
     "definitions/insight/insight_gafe_delta_api/inverter_pwr_status_summary_1h.sqlx",
-    "definitions/raw/raw_gafe_delta_api.data.sqlx"
+    "definitions/raw/raw_gafe_delta_api/data.sqlx"
   }
   pickers.new({}, {
     prompt_title = prompt_name,
     finder = finders.new_table {
       results = test_file,
     },
-    sorter = sorters.generic_sorter(),
+    sorter = conf.generic_sorter({}),
   }):find()
 end
 
