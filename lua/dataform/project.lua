@@ -166,7 +166,9 @@ end
 function dataform.find_model_dependencies()
   local tables = dataform.compiled_project_table.tables
   local operations = dataform.compiled_project_table.operations
-  local all_models = vim.fn.extend(tables, operations)
+  local declarations = dataform.compiled_project_tables.declarations
+  local all_models0 = vim.fn.extend(tables, operations)
+  local all_models = vim.fn.extend(all_models0, declarations)
   local target_paths = {}
 
   for _, model in pairs(all_models) do
