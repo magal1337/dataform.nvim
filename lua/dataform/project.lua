@@ -156,9 +156,7 @@ local function get_file_name_by_schema_name(schema, name)
   local all_models0 = vim.fn.extend(tables, operations)
   local all_models = vim.fn.extend(all_models0, declarations)
 
-  vim.print("esse e o input: " .. schema .. name)
   for _, model in pairs(all_models) do
-    vim.print(model.target.schema .. model.target.name)
     if model.target.schema == schema and model.target.name == name then
       return model.fileName
     end
