@@ -170,7 +170,7 @@ function dataform.find_model_dependencies()
           end
         end
       end
-      vim.notify(target_paths, 2)
+      vim.print(target_paths)
       return utils.custom_picker("Model Dependencies", target_paths)
     end
   end
