@@ -174,11 +174,13 @@ function dataform.find_model_dependencies()
   for _, model in pairs(all_models) do
     if model.fileName == get_dataform_definitions_file_path() then
       local dependencies = model.dependencyTargets
-      for _, dependency in pairs(dependencies) do
-        local schema = dependency.schema
-        local name = dependency.name
-        local target_path = get_file_name_by_schema_name(schema, name)
-        table.insert(target_paths, target_path)
+      if dependencies ~= nil then
+        for _, dependency in pairs(dependencies) do
+          local schema = dependency.schema
+          local name = dependency.name
+          local target_path = get_file_name_by_schema_name(schema, name)
+          table.insert(target_paths, target_path)
+        end
       end
       return utils.custom_picker("Model Dependencies", target_paths)
     end
