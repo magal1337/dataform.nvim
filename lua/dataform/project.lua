@@ -154,9 +154,10 @@ local function get_file_name_by_schema_name(schema, name)
   local operations = dataform.compiled_project_table.operations
   local all_models = vim.fn.extend(tables, operations)
 
-  for _, table in pairs(all_models) do
-    if table.target.schema == schema and table.target.name == name then
-      return table.fileName
+  for _, model in pairs(all_models) do
+    if model.target.schema == schema and model.target.name == name then
+      vim.print(model.fileName)
+      return model.fileName
     end
   end
 end
