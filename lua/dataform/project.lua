@@ -149,11 +149,22 @@ function dataform.run_assertions_job()
   end
 end
 
+local function get_file_name_by_schema_name(schema, name)
+  local tables = dataform.compiled_project_table.tables
+  local operations = dataform.compiled_project_table.operations
+  local all_models = vim.fn.extend(tables, operations)
+
+  for _, table in pairs(all_models) do
+    if table.target.schema == schema and table.target.name == name then
+      return table.fileName
+    end
+  end
+end
+
 function dataform.find_model_dependencies()
   local tables = dataform.compiled_project_table.tables
   local operations = dataform.compiled_project_table.operations
   local all_models = vim.fn.extend(tables, operations)
-  local all_models2 = vim.fn.extend(tables, operations)
   local target_paths = {}
 
   for _, table in pairs(all_models) do
@@ -162,16 +173,9 @@ function dataform.find_model_dependencies()
       for _, dependency in pairs(dependencies) do
         local schema = dependency.schema
         local name = dependency.name
-        for _, table2 in pairs(all_models2) do
-          if table2.target.schema == schema and table2.target.name == name then
-            local target_path = table2.fileName
-            vim.print(target_path)
-            table.insert(target_paths, target_path)
-            break
-          end
-        end
+        local target_path = get_file_name_by_schema_name(schema, name)
+        table.insert(target_paths, target_path)
       end
-      vim.print(target_paths)
       return utils.custom_picker("Model Dependencies", target_paths)
     end
   end
