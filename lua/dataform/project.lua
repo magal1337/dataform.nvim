@@ -167,9 +167,9 @@ function dataform.find_model_dependencies()
   local all_models = vim.fn.extend(tables, operations)
   local target_paths = {}
 
-  for _, table in pairs(all_models) do
-    if table.fileName == get_dataform_definitions_file_path() then
-      local dependencies = table.dependencyTargets
+  for _, model in pairs(all_models) do
+    if model.fileName == get_dataform_definitions_file_path() then
+      local dependencies = model.dependencyTargets
       for _, dependency in pairs(dependencies) do
         local schema = dependency.schema
         local name = dependency.name
