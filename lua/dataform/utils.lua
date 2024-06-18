@@ -1,5 +1,10 @@
-local utils = {}
+local actions = require('telescope.actions')
+local action_state = require('telescope.actions.state')
+local pickers = require('telescope.pickers')
+local finders = require('telescope.finders')
+local sorters = require('telescope.sorters')
 
+local utils = {}
 
 function utils.get_current_file_path()
   return vim.fn.expand('%:p')
@@ -27,6 +32,24 @@ function utils.open_buffer_with_content(content)
   vim.api.nvim_buf_set_lines(bufnr, 0, -1, true, vim.split(content, "\n"))
   vim.api.nvim_command("split")
   vim.api.nvim_win_set_buf(0, bufnr)
+end
+
+function utils.custom_picker(prompt_name, custom_file_paths)
+  pickers.new({}, {
+    prompt_title = prompt_name,
+    finder = finders.new_table {
+      results = custom_file_paths,
+    },
+    sorter = sorters.get_generic_fuzzy_sorter(),
+    attach_mappings = function(_, map)
+      map('i', '<CR>', function(prompt_bufnr)
+        local selection = action_state.get_selected_entry()
+        actions.close(prompt_bufnr)
+        vim.cmd('edit ' .. selection.value)
+      end)
+      return true
+    end,
+  }):find()
 end
 
 return utils

@@ -149,4 +149,30 @@ function dataform.run_assertions_job()
   end
 end
 
+function dataform.find_model_dependencies()
+  local tables = dataform.compiled_project_table.tables
+  local operations = dataform.compiled_project_table.operations
+  local all_models = vim.fn.extend(tables, operations)
+
+  for _, table in pairs(all_models) do
+    if table.fileName == get_dataform_definitions_file_path() then
+      local dependencies = table.dependencyTargets
+      local target_paths = {}
+      for _, dependency in pairs(dependencies) do
+        local schema = dependency.schema
+        local name = dependency.name
+        local database = dependency.database
+        for _, table in pairs(all_models) do
+          if table.target.schema == schema and table.target.name == name and table.target.database == database then
+            local target_path = table.fileName
+            table.insert(target_paths, target_path)
+            break
+          end
+        end
+      end
+      return utils.custom_picker("Model Dependencies", target_paths)
+    end
+  end
+end
+
 return dataform
