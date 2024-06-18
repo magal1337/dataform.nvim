@@ -153,6 +153,7 @@ function dataform.find_model_dependencies()
   local tables = dataform.compiled_project_table.tables
   local operations = dataform.compiled_project_table.operations
   local all_models = vim.fn.extend(tables, operations)
+  local all_models2 = vim.fn.extend(tables, operations)
   local target_paths = {}
 
   for _, table in pairs(all_models) do
@@ -162,7 +163,7 @@ function dataform.find_model_dependencies()
         local schema = dependency.schema
         local name = dependency.name
         local database = dependency.database
-        for _, table2 in pairs(all_models) do
+        for _, table2 in pairs(all_models2) do
           if table2.target.schema == schema and table2.target.name == name and table2.target.database == database then
             local target_path = table2.fileName
             table.insert(target_paths, target_path)
