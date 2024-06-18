@@ -152,7 +152,10 @@ end
 local function get_file_name_by_schema_name(schema, name)
   local tables = dataform.compiled_project_table.tables
   local operations = dataform.compiled_project_table.operations
-  local all_models = vim.fn.extend(tables, operations)
+  local declarations = dataform.compiled_project_table.declarations
+  local all_models0 = vim.fn.extend(tables, operations)
+  local all_models = vim.fn.extend(all_models0, declarations)
+
   vim.print("esse e o input: " .. schema .. name)
   for _, model in pairs(all_models) do
     vim.print(model.target.schema .. model.target.name)
@@ -165,9 +168,7 @@ end
 function dataform.find_model_dependencies()
   local tables = dataform.compiled_project_table.tables
   local operations = dataform.compiled_project_table.operations
-  local declarations = dataform.compiled_project_table.declarations
-  local bind_models = vim.fn.extend(tables, operations)
-  local all_models = vim.fn.extend(bind_models, declarations)
+  local all_models = vim.fn.extend(tables, operations)
   local target_paths = {}
 
   for _, model in pairs(all_models) do
@@ -177,7 +178,6 @@ function dataform.find_model_dependencies()
         local schema = dependency.schema
         local name = dependency.name
         local target_path = get_file_name_by_schema_name(schema, name)
-        vim.print(target_path)
         table.insert(target_paths, target_path)
       end
       return utils.custom_picker("Model Dependencies", target_paths)
