@@ -200,9 +200,11 @@ function dataform.find_model_dependents()
       local schema = model.target.schema
       local name = model.target.name
       for _, model2 in pairs(all_models) do
-        for _, dependency in pairs(model2.dependencyTargets) do
-          if dependency.schema == schema and dependency.name == name then
-            table.insert(target_paths, model2.fileName)
+        if model2.dependencyTargets ~= nil then
+          for _, dependency in pairs(model2.dependencyTargets) do
+            if dependency.schema == schema and dependency.name == name then
+              table.insert(target_paths, model2.fileName)
+            end
           end
         end
       end
