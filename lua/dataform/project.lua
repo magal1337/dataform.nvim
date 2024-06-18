@@ -162,9 +162,8 @@ function dataform.find_model_dependencies()
       for _, dependency in pairs(dependencies) do
         local schema = dependency.schema
         local name = dependency.name
-        local database = dependency.database
         for _, table2 in pairs(all_models2) do
-          if table2.target.schema == schema and table2.target.name == name and table2.target.database == database then
+          if table2.target.schema == schema and table2.target.name == name then
             local target_path = table2.fileName
             vim.print(target_path)
             table.insert(target_paths, target_path)
