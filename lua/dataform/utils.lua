@@ -52,6 +52,14 @@ function utils.custom_picker(prompt_name, custom_file_paths)
       end,
     }),
     sorter = conf.generic_sorter({}),
+    attach_mappings = function(_, map)
+      map('i', '<CR>', function(prompt_bufnr)
+        local selection = action_state.get_selected_entry()
+        actions.close(prompt_bufnr)
+        vim.cmd('edit ' .. selection.value)
+      end)
+      return true
+    end,
   }):find()
 end
 
