@@ -174,8 +174,8 @@ function dataform.find_model_dependencies()
       for _, dependency in pairs(dependencies) do
         local schema = dependency.schema
         local name = dependency.name
-        vim.print(schema, name)
         local target_path = get_file_name_by_schema_name(schema, name)
+        vim.print(target_path)
         table.insert(target_paths, target_path)
       end
       return utils.custom_picker("Model Dependencies", target_paths)
