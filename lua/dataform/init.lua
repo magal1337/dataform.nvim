@@ -13,5 +13,6 @@ M.run_all = dataform.run_all
 M.run_tag = dataform.run_tag
 M.run_assertions_job = dataform.run_assertions_job
 M.find_model_dependencies = dataform.find_model_dependencies
+M.find_model_dependents = dataform.find_model_dependents
 
 return M

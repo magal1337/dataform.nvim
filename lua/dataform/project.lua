@@ -187,4 +187,28 @@ function dataform.find_model_dependencies()
   end
 end
 
+function dataform.find_model_dependents()
+  local tables = dataform.compiled_project_table.tables
+  local operations = dataform.compiled_project_table.operations
+  local declarations = dataform.compiled_project_table.declarations
+  local all_models0 = vim.fn.extend(tables, operations)
+  local all_models = vim.fn.extend(all_models0, declarations)
+  local target_paths = {}
+
+  for _, model in pairs(all_models) do
+    if model.fileName == get_dataform_definitions_file_path() then
+      local schema = model.target.schema
+      local name = model.target.name
+      for _, model2 in pairs(all_models) do
+        for _, dependency in pairs(model2.dependencyTargets) do
+          if dependency.schema == schema and dependency.name == name then
+            table.insert(target_paths, model2.fileName)
+          end
+        end
+      end
+      return utils.custom_picker("Model Dependents", target_paths)
+    end
+  end
+end
+
 return dataform
