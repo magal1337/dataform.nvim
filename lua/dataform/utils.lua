@@ -36,7 +36,10 @@ end
 
 function utils.custom_picker(prompt_name, custom_file_paths)
   vim.print(custom_file_paths)
-  local test_file = { "definitions/insight/insight_gafe_delta_api/inverter_pwr_status_summary_1h.sqlx" }
+  local test_file = {
+    "definitions/insight/insight_gafe_delta_api/inverter_pwr_status_summary_1h.sqlx",
+    "definitions/raw/raw_gafe_delta_api.data.sqlx"
+  }
   pickers.new({}, {
     prompt_title = prompt_name,
     finder = finders.new_table {
