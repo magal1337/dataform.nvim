@@ -35,6 +35,7 @@ function utils.open_buffer_with_content(content)
 end
 
 function utils.custom_picker(prompt_name, custom_file_paths)
+  vim.print(custom_file_paths)
   pickers.new({}, {
     prompt_title = prompt_name,
     finder = finders.new_table {
