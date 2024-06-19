@@ -184,13 +184,9 @@ function dataform.find_model_dependents()
   local target_model = find_model_by_file_path(all_models, target_file_path)
   local target_paths = {}
 
-  if not target_model then
-    return utils.custom_picker("Model Dependents", target_paths)
-  end
-
   local schema = target_model.target.schema
   local name = target_model.target.name
-
+  vim.print(schema .. " " .. name)
   for _, model in pairs(all_models) do
     local dependency_targets = model.dependencyTargets
     if dependency_targets then
