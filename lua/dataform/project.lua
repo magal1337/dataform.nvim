@@ -153,11 +153,9 @@ local function get_all_models()
   local tables = dataform.compiled_project_table.tables
   local operations = dataform.compiled_project_table.operations
   local declarations = dataform.compiled_project_table.declarations
-  local all_models = {}
-  vim.fn.extend(all_models, tables)
-  vim.fn.extend(all_models, operations)
-  vim.fn.extend(all_models, declarations)
-  return all_models
+  local all_models = vim.fn.extend(tables, operations)
+
+  return vim.fn.extend(all_models, declarations)
 end
 
 local function find_model_by_file_path(all_models, target_file_path)
@@ -180,7 +178,6 @@ end
 
 function dataform.find_model_dependents()
   local all_models = get_all_models()
-  vim.print(all_models)
   local target_file_path = get_dataform_definitions_file_path()
   local target_model = find_model_by_file_path(all_models, target_file_path)
   local target_paths = {}
