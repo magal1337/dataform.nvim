@@ -151,7 +151,7 @@ end
 
 local function get_all_models()
   local tables = dataform.compiled_project_table.tables
-  local operations = dataform.compiled_project_table.operations
+  local operations = dataform.compiled_project_table.operations or {}
   local declarations = dataform.compiled_project_table.declarations
   local all_models = vim.fn.extend(tables, operations)
 
