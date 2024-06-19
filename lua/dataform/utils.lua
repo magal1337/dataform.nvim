@@ -1,5 +1,8 @@
+local pickers = require('telescope.pickers')
+local finders = require('telescope.finders')
+local previewers = require('telescope.previewers')
+local conf = require("telescope.config").values
 local utils = {}
-
 
 function utils.get_current_file_path()
   return vim.fn.expand('%:p')
@@ -27,6 +30,21 @@ function utils.open_buffer_with_content(content)
   vim.api.nvim_buf_set_lines(bufnr, 0, -1, true, vim.split(content, "\n"))
   vim.api.nvim_command("split")
   vim.api.nvim_win_set_buf(0, bufnr)
+end
+
+function utils.custom_picker(prompt_name, custom_file_paths)
+  pickers.new({}, {
+    prompt_title = prompt_name,
+    finder = finders.new_table {
+      results = custom_file_paths,
+    },
+    previewer = previewers.new_termopen_previewer({
+      get_command = function(entry)
+        return { "cat", entry.value }
+      end,
+    }),
+    sorter = conf.generic_sorter({}),
+  }):find()
 end
 
 return utils

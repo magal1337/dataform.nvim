@@ -149,4 +149,77 @@ function dataform.run_assertions_job()
   end
 end
 
+local function get_all_models()
+  local tables = dataform.compiled_project_table.tables
+  local operations = dataform.compiled_project_table.operations
+  local declarations = dataform.compiled_project_table.declarations
+  local all_models = vim.fn.extend(tables, operations)
+
+  return vim.fn.extend(all_models, declarations)
+end
+
+local function find_model_by_file_path(all_models, target_file_path)
+  for _, model in pairs(all_models) do
+    if model.fileName == target_file_path then
+      return model
+    end
+  end
+  return nil
+end
+
+local function find_file_name_by_schema_name(all_models, schema, name)
+  for _, model in pairs(all_models) do
+    if model.target.schema == schema and model.target.name == name then
+      return model.fileName
+    end
+  end
+  return nil
+end
+
+function dataform.find_model_dependents()
+  local all_models = get_all_models()
+  local target_file_path = get_dataform_definitions_file_path()
+  local target_model = find_model_by_file_path(all_models, target_file_path)
+  local target_paths = {}
+
+  local schema = target_model.target.schema
+  local name = target_model.target.name
+
+  for _, model in pairs(all_models) do
+    local dependency_targets = model.dependencyTargets
+    if dependency_targets then
+      for _, dependency in pairs(dependency_targets) do
+        if dependency.schema == schema and dependency.name == name then
+          table.insert(target_paths, model.fileName)
+        end
+      end
+    end
+  end
+
+  return utils.custom_picker("Model Dependents", target_paths)
+end
+
+function dataform.find_model_dependencies()
+  local all_models = get_all_models()
+  local target_file_path = get_dataform_definitions_file_path()
+  local target_model = find_model_by_file_path(all_models, target_file_path)
+  local target_paths = {}
+
+  if not target_model then
+    return utils.custom_picker("Model Dependencies", target_paths)
+  end
+
+  local dependencies = target_model.dependencyTargets
+  if dependencies then
+    for _, dependency in pairs(dependencies) do
+      local schema = dependency.schema
+      local name = dependency.name
+      local target_path = find_file_name_by_schema_name(all_models, schema, name)
+      table.insert(target_paths, target_path)
+    end
+  end
+
+  return utils.custom_picker("Model Dependencies", target_paths)
+end
+
 return dataform
