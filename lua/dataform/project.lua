@@ -184,7 +184,7 @@ function dataform.find_model_dependents()
 
   local schema = target_model.target.schema
   local name = target_model.target.name
-  vim.print(schema .. " " .. name)
+
   for _, model in pairs(all_models) do
     local dependency_targets = model.dependencyTargets
     if dependency_targets then
