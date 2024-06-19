@@ -180,6 +180,7 @@ end
 
 function dataform.find_model_dependents()
   local all_models = get_all_models()
+  vim.print(all_models)
   local target_file_path = get_dataform_definitions_file_path()
   local target_model = find_model_by_file_path(all_models, target_file_path)
   local target_paths = {}
