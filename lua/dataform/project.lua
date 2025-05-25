@@ -1,4 +1,3 @@
-vim.notify = require("notify")
 local utils = require("dataform.utils")
 
 local dataform = {}
@@ -12,7 +11,10 @@ function dataform.set_dataform_workdir_project_path()
     local parent_path = current_path:gsub("/definitions/.*", "/")
     vim.api.nvim_set_current_dir(parent_path)
   else
-    return vim.notify("Error: File does not exist inside dataform definitions folder.", 4)
+    return utils.notify(
+      "Error: File does not exist inside dataform definitions folder.",
+      vim.log.levels.ERROR
+    )
   end
 end
 
@@ -25,7 +27,10 @@ local function get_dataform_definitions_file_path()
   if is_match then
     return "definitions/" .. dataform_path
   end
-  return vim.notify("Error: File does not exist inside dataform definitions folder.", 4)
+  return utils.notify(
+    "Error: File does not exist inside dataform definitions folder.",
+    vim.log.levels.ERROR
+  )
 end
 
 function dataform.go_to_ref()
@@ -48,10 +53,13 @@ function dataform.compile()
   local status, content = utils.os_execute_with_status(command .. " --json", true)
   if status == 0 then
     dataform.compiled_project_table = vim.fn.json_decode(content)
-    vim.notify("Dataform compiled successfully.", 2)
+    utils.notify("Dataform compiled successfully.", vim.log.levels.INFO)
   else
     local _, content_error = utils.os_execute_with_status(command)
-    vim.notify("Error: Dataform compile failed. \n\n" .. content_error, 4)
+    utils.notify(
+      "Error: Dataform compile failed. \n\n" .. content_error,
+      vim.log.levels.ERROR
+    )
   end
 end
 
@@ -75,7 +83,7 @@ function dataform.get_compiled_sql_job(incremental)
 
       local _, result = utils.os_execute_with_status(bq_command)
 
-      vim.notify(result, 3)
+      utils.notify(result, vim.log.levels.WARN)
       return utils.open_buffer_with_content(composite_query)
     end
   end
@@ -85,9 +93,15 @@ function dataform.run_all()
   local command = "dataform run"
   local status, content = utils.os_execute_with_status(command)
   if status == 0 then
-    return vim.notify("Dataform run executed successfully.", 2)
+    return utils.notify(
+      "Dataform run executed successfully.",
+      vim.log.levels.INFO
+    )
   end
-  return vim.notify("Error: Dataform run failed. \n\n" .. content, 4)
+  return utils.notify(
+    "Error: Dataform run failed. \n\n" .. content,
+    vim.log.levels.ERROR
+  )
 end
 
 function dataform.run_tag(args)
@@ -95,10 +109,16 @@ function dataform.run_tag(args)
   local command = "dataform run --tags=" .. tags
   local status, content = utils.os_execute_with_status(command)
   if status == 0 then
-    return vim.notify("Dataform tag run executed successfully.", 2)
+    return utils.notify(
+      "Dataform tag run executed successfully.",
+      vim.log.levels.INFO
+    )
   end
 
-  return vim.notify("Error: Dataform tag run failed. \n\n" .. content, 4)
+  return utils.notify(
+    "Error: Dataform tag run failed. \n\n" .. content,
+    vim.log.levels.ERROR
+  )
 end
 
 function dataform.run_action_job(full_refresh)
@@ -115,9 +135,15 @@ function dataform.run_action_job(full_refresh)
       local status, content = utils.os_execute_with_status(command)
 
       if status == 0 then
-        return vim.notify("Dataform run executed successfully.", 2)
+        return utils.notify(
+          "Dataform run executed successfully.",
+          vim.log.levels.INFO
+        )
       end
-      return vim.notify("Error: Dataform run failed. \n\n" .. content, 4)
+      return utils.notify(
+        "Error: Dataform run failed. \n\n" .. content,
+        vim.log.levels.ERROR
+      )
     end
   end
 end
@@ -134,7 +160,10 @@ function dataform.run_assertions_job()
   end
   -- check if target_assertions is still empty and if it is raise error
   if vim.tbl_isempty(target_assertions) then
-    return vim.notify("Error: There is no assertions for this file.", 4)
+    return utils.notify(
+      "Error: There is no assertions for this file.",
+      vim.log.levels.ERROR
+    )
   end
 
   for _, assertion in pairs(target_assertions) do
@@ -142,9 +171,15 @@ function dataform.run_assertions_job()
     local status, content = utils.os_execute_with_status(command)
 
     if status == 0 then
-      vim.notify("Dataform assertion: \n" .. assertion .. "\nexecuted successfully.", 2)
+      utils.notify(
+        "Dataform assertion: \n" .. assertion .. "\nexecuted successfully.",
+        vim.log.levels.INFO
+      )
     else
-      vim.notify("Error: Dataform assertions failed. \n\n" .. content, 4)
+      utils.notify(
+        "Error: Dataform assertions failed. \n\n" .. content,
+        vim.log.levels.ERROR
+      )
     end
   end
 end

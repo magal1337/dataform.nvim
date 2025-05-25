@@ -47,4 +47,13 @@ function utils.custom_picker(prompt_name, custom_file_paths)
   }):find()
 end
 
+function utils.notify(msg, level)
+  local notify_fn = vim.notify
+  local has_notify_plugin, notify_plugin_fn = pcall(require, 'notify')
+  if has_notify_plugin then
+    notify = notify_plugin_fn
+  end
+  notify_fn(msg, level)
+end
+
 return utils

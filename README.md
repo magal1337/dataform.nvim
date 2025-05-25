@@ -22,9 +22,11 @@
 ## 📜 Requirements
 
 - [Dataform CLI](https://cloud.google.com/dataform/docs/use-dataform-cli) to get stuff done
-- [nvim-notify](https://github.com/rcarriga/nvim-notify) for amazing notifications
 - [telescope.nvim](https://github.com/nvim-telescope/telescope.nvim/tree/master) for smart dependencies/dependents finder
 - [BigQuery CLI Tool](https://cloud.google.com/bigquery/docs/bq-command-line-tool?hl=pt-br) to validate BigQuery sql script
+
+### Optional
+- [nvim-notify](https://github.com/rcarriga/nvim-notify) for amazing notifications
 
 ## 🧪 Installation
 
