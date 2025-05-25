@@ -51,7 +51,7 @@ function utils.notify(msg, level)
   local notify_fn = vim.notify
   local has_notify_plugin, notify_plugin_fn = pcall(require, 'notify')
   if has_notify_plugin then
-    notify = notify_plugin_fn
+    notify_fn = notify_plugin_fn
   end
   notify_fn(msg, level)
 end
