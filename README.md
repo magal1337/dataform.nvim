@@ -22,11 +22,16 @@
 ## 📜 Requirements
 
 - [Dataform CLI](https://cloud.google.com/dataform/docs/use-dataform-cli) to get stuff done
-- [telescope.nvim](https://github.com/nvim-telescope/telescope.nvim/tree/master) for smart dependencies/dependents finder
 - [BigQuery CLI Tool](https://cloud.google.com/bigquery/docs/bq-command-line-tool?hl=pt-br) to validate BigQuery sql script
 
-### Optional
+### Optional Enhancements
+
+While not strictly required, these plugins significantly enhance the experience:
+- [telescope.nvim](https://github.com/nvim-telescope/telescope.nvim/tree/master) for smart dependencies/dependents finder
 - [nvim-notify](https://github.com/rcarriga/nvim-notify) for amazing notifications
+
+The plugin falls back to Neovim's built-in `vim.ui.select` for interactive selections if `telescope.nvim` is not installed.
+This means the plugin will automatically work with other fuzzy finder plugins (like `fzf-lua`) that override `vim.ui.select`.
 
 ## 🧪 Installation
 
@@ -36,6 +41,7 @@ Use your favorite plugin manager to install it. For example:
 use {
   'magal1337/dataform.nvim',
   requires = {
+    -- Optional dependencies
     'rcarriga/nvim-notify',
     'nvim-telescope/telescope.nvim'
   },
@@ -58,8 +64,8 @@ And also every time that you edit your `.sqlx` file, and hit `:w` it will recomp
 |`:DataformRunActionIncremental`|Same thing as `:DataformRunAction` but it will run the current model with incremental option if your model is of type `incremental`.||
 |`:DataformRunTag`|Will run a specific tag that you specify.| A specific tag name like `:DataformRunTag tag_name` or a list of tags like `:DataformRunTag tag_name1,tag_name2` |
 |`:DataformRunAssertions`| Will run the current model assertions. ||
-|`:DataformFindDependencies`| Will return a Telescope Finder with all dependencies for current model ||
-|`:DataformFindDependents`| Will return a Telescope Finder with all dependents for current model ||
+|`:DataformFindDependencies`| Will return a Finder with all dependencies for current model ||
+|`:DataformFindDependents`| Will return a Finder with all dependents for current model ||
 
 🔮 It's recommended to use these commands encapsulated in some custom keymaps to make it more convenient. Choose what suits you best.
 ## 📖 Syntax Highlight
