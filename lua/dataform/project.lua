@@ -37,8 +37,8 @@ function dataform.go_to_ref()
   local line = vim.fn.getline('.')
   local _, _, schema, table_name = line:find('%${%s*ref%(%s*["\']([^"]+)["\']%s*,%s*["\']([^"]+)["\']%s*%)%s*}')
 
-  local df_tables = dataform.compiled_project_table.tables
-  local df_declarations = dataform.compiled_project_table.declarations
+  local df_tables = dataform.compiled_project_table.tables or {}
+  local df_declarations = dataform.compiled_project_table.declarations or {}
   local tables = vim.fn.extend(df_tables, df_declarations)
 
   for _, table in pairs(tables) do
@@ -123,8 +123,8 @@ end
 
 function dataform.run_action_job(full_refresh)
   local full_refresh = full_refresh or false
-  local df_tables = dataform.compiled_project_table.tables
-  local df_operations = dataform.compiled_project_table.operations
+  local df_tables = dataform.compiled_project_table.tables or {}
+  local df_operations = dataform.compiled_project_table.operations or {}
   local tables = vim.fn.extend(df_tables, df_operations)
 
   for _, table in pairs(tables) do
@@ -185,9 +185,9 @@ function dataform.run_assertions_job()
 end
 
 local function get_all_models()
-  local tables = dataform.compiled_project_table.tables
+  local tables = dataform.compiled_project_table.tables or {}
   local operations = dataform.compiled_project_table.operations or {}
-  local declarations = dataform.compiled_project_table.declarations
+  local declarations = dataform.compiled_project_table.declarations or {}
   local all_models = vim.fn.extend(tables, operations)
 
   return vim.fn.extend(all_models, declarations)
