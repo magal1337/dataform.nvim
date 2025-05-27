@@ -4,6 +4,24 @@ local utils = require("dataform.utils")
 local dataform = {}
 dataform.compiled_project_table = {}
 
+---@alias DataformUserConfig table
+---@field compile_on_save boolean? (default: true) Automatically compile Dataform project on saving a .sqlx file.
+
+local default_config = {
+  compile_on_save = true,
+}
+dataform.config = vim.deepcopy(default_config)
+
+---@param user_config DataformUserConfig?
+function dataform.setup(user_config)
+  user_config = user_config or {}
+  for key, value in pairs(user_config) do
+    if default_config[key] ~= nil then
+      dataform.config[key] = value
+    end
+  end
+end
+
 function dataform.set_dataform_workdir_project_path()
   local current_path = utils.get_current_file_path()
   local is_match = string.match(current_path, "/definitions/.*")
@@ -220,6 +238,12 @@ function dataform.find_model_dependencies()
   end
 
   return utils.custom_picker("Model Dependencies", target_paths)
+end
+
+function dataform.compile_on_save()
+  if dataform.config.compile_on_save then
+    dataform.compile()
+  end
 end
 
 return dataform
