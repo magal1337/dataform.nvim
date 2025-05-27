@@ -31,13 +31,16 @@ end
 function dataform.go_to_ref()
   local line = vim.fn.getline('.')
   local _, _, schema, table_name = line:find('%${%s*ref%(%s*["\']([^"]+)["\']%s*,%s*["\']([^"]+)["\']%s*%)%s*}')
+  if not schema then
+      _, _, table_name = line:find('%${%s*ref%(%s*["\']([^"]+)["\']%s*%)%s*}')
+  end
 
   local df_tables = dataform.compiled_project_table.tables
   local df_declarations = dataform.compiled_project_table.declarations
   local tables = vim.fn.extend(df_tables, df_declarations)
 
   for _, table in pairs(tables) do
-    if table.target.schema == schema and table.target.name == table_name then
+    if table.target.name == table_name and (table.target.schema == schema or not schema)  then
       return utils.open_file(table.fileName)
     end
   end
