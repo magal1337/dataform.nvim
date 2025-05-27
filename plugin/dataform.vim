@@ -22,6 +22,13 @@ function! s:HandleSQLXEvent()
   endif
 endfunction
 
+lua << EOF
+  local has_cmp, cmp = pcall(require, 'cmp')
+  if has_cmp then
+    cmp.register_source('dataform_actions', require('dataform').completion_cmp_source)
+  end
+EOF
+
 autocmd BufWritePost *.sqlx execute "lua require('dataform').compile()"
 
 command! -nargs=0 DataformCompileFull lua require('dataform').get_compiled_sql_job()

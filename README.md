@@ -18,6 +18,7 @@
 - Run dataform specific tag
 - Syntax highlighting for both sql and javascript blocks
 - Search for dependencies and dependents for a specific model
+- Autocompletion for Dataform action names (e.g., within `ref("...")`, `resolve("...")`) in `.sqlx` files using `nvim-cmp`.
 
 ## 📜 Requirements
 
@@ -38,6 +39,26 @@ use {
     'nvim-telescope/telescope.nvim'
   },
 }
+```
+
+## 🚀 Completions
+
+This plugin provides an `nvim-cmp` source named `dataform_actions` for autocompleting Dataform action names.
+This is particularly useful when writing `ref("...")` or `resolve("...")` calls within the JavaScript blocks or string literals in your `.sqlx` files.
+
+#### Example Setup
+To use the autocompletion, you need to add it to your `nvim-cmp` sources configuration, typically for the `sqlx` filetype.
+Here's how you can prepend the `dataform_actions` source to your existing global sources for `sqlx` files:
+
+```lua
+local cmp = require('cmp')
+
+cmp.setup.filetype('sqlx', {
+  sources = vim.fn.extend(
+    { { name = 'dataform_actions' } },
+    cmp.get_config().sources
+  )
+})
 ```
 
 ## 🧙‍♂️ Usage
