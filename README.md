@@ -37,6 +37,12 @@ use {
     'rcarriga/nvim-notify',
     'nvim-telescope/telescope.nvim'
   },
+  config = function ()
+    require('dataform').setup({
+        -- refresh dataform metadata on each save
+        compile_on_save = true
+    })
+  end
 }
 ```
 
@@ -44,6 +50,16 @@ use {
 
 First time that you open a dataform project with a `.sqlx` file in neovim session, it will automatically compile the project.
 And also every time that you edit your `.sqlx` file, and hit `:w` it will recompile it again for you not worry to do it manually. 🔮
+
+
+This auto-compile on save behavior is controlled by the `compile_on_save` option in the plugin's `setup` function.
+
+
+If you set `compile_on_save = false` in the setup, the plugin will not automatically recompile on save.
+You can then trigger compilation manually at any time using the command:
+```vim
+lua require('dataform').compile()
+```
 
 ## 🌀 Commands
 | Command | Action | Arguments|
