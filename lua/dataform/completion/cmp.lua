@@ -3,7 +3,7 @@ local utils = require('dataform.completion.utils')
 local source = {}
 
 function source:is_available()
-  return utils.is_sqlx_js_string_syntax()
+  return vim.bo.filetype == 'sqlx' and utils.is_sqlx_js_string_syntax()
 end
 
 function source:complete(params, callback)
