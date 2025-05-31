@@ -1,7 +1,3 @@
-local pickers = require('telescope.pickers')
-local finders = require('telescope.finders')
-local previewers = require('telescope.previewers')
-local conf = require("telescope.config").values
 local utils = {}
 
 function utils.get_current_file_path()
@@ -33,18 +29,47 @@ function utils.open_buffer_with_content(content)
 end
 
 function utils.custom_picker(prompt_name, custom_file_paths)
-  pickers.new({}, {
-    prompt_title = prompt_name,
-    finder = finders.new_table {
-      results = custom_file_paths,
-    },
-    previewer = previewers.new_termopen_previewer({
-      get_command = function(entry)
-        return { "cat", entry.value }
-      end,
-    }),
-    sorter = conf.generic_sorter({}),
-  }):find()
+  if not custom_file_paths or #custom_file_paths == 0 then return end
+
+  local has_telescope, telescope = pcall(require, "telescope")
+  if has_telescope then
+    local pickers = require("telescope.pickers")
+    local finders = require("telescope.finders")
+    local previewers = require("telescope.previewers")
+    local conf = require("telescope.config").values
+
+    pickers.new({}, {
+      prompt_title = prompt_name,
+      finder = finders.new_table {
+        results = custom_file_paths,
+      },
+      previewer = previewers.new_termopen_previewer({
+        get_command = function(entry)
+          return { "cat", entry.value }
+        end,
+      }),
+      sorter = conf.generic_sorter({}),
+    }):find()
+  else
+    vim.ui.select(
+      custom_file_paths,
+      { prompt = prompt_name },
+      function(choice)
+        if choice then
+          vim.cmd.edit(choice)
+        end
+      end
+    )
+  end
+end
+
+function utils.notify(msg, level)
+  local notify_fn = vim.notify
+  local has_notify_plugin, notify_plugin_fn = pcall(require, 'notify')
+  if has_notify_plugin then
+    notify_fn = notify_plugin_fn
+  end
+  notify_fn(msg, level)
 end
 
 return utils
