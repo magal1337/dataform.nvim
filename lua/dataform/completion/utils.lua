@@ -1,8 +1,7 @@
 local M = {}
 
-local dataform = require('dataform.project')
-
 function M.action_names()
+  local dataform = require('dataform.project')
   local compiled = dataform.compiled_project_table or {}
   local tables = compiled.tables or {}
 

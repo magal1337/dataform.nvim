@@ -4,7 +4,9 @@ local utils = require('dataform.completion.utils')
 --- @class blink.cmp.Source
 local source = {}
 
-function source:new()
+function source.new(opts)
+  local self = setmetatable({}, { __index = source })
+  self.opts = opts
   return self
 end
 
