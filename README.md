@@ -18,6 +18,7 @@
 - Run dataform specific tag
 - Syntax highlighting for both sql and javascript blocks
 - Search for dependencies and dependents for a specific model
+- Autocompletion for Dataform action names (e.g., within `ref("...")`, `resolve("...")`) in `.sqlx` files using `nvim-cmp` or `blink.cmp`.
 
 ## 📜 Requirements
 
@@ -52,6 +53,47 @@ use {
     })
   end
 }
+```
+
+## 🚀 Completions
+
+This plugin provides an `nvim-cmp` source named `dataform_actions` and `blink.cmp` source in module `dataform.completion.blink` for autocompleting Dataform action names.
+This is particularly useful when writing `ref("...")` or `resolve("...")` calls within the JavaScript blocks or string literals in your `.sqlx` files.
+
+#### Example Setup for `nvim.cmp`
+To use the autocompletion, you need to add it to your `nvim-cmp` sources configuration, typically for the `sqlx` filetype.
+Here's how you can prepend the `dataform_actions` source to your existing global sources for `sqlx` files:
+
+```lua
+local cmp = require('cmp')
+
+cmp.setup.filetype('sqlx', {
+  sources = vim.fn.extend(
+    { { name = 'dataform_actions' } },
+    cmp.get_config().sources
+  )
+})
+```
+
+#### Example Setup for `blink.cmp`
+To integrate the Dataform autocompletion with `blink.cmp`, you need to configure its sources to include the `dataform.completion.blink` module, either specifically for `sqlx` filetypes or add it to the list of `default` sources.
+
+Here's how you can set up `blink.cmp` to use the Dataform completion provider:
+```lua
+blink.setup({
+  sources = {
+    default = { 'lsp', 'path', 'snippets', 'buffer' },
+    providers = {
+      dataform = {
+        name = "Dataform",
+        module = "dataform.completion.blink",
+      },
+    },
+    per_filetype = {
+      sqlx = { 'dataform', 'lsp', 'path', 'snippets', 'buffer' }
+    },
+  },
+})
 ```
 
 ## 🧙‍♂️ Usage
