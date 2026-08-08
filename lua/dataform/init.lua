@@ -16,6 +16,7 @@ M.run_tag = dataform.run_tag
 M.run_assertions_job = dataform.run_assertions_job
 M.find_model_dependencies = dataform.find_model_dependencies
 M.find_model_dependents = dataform.find_model_dependents
+M.clear_cache = dataform.clear_cache
 M.completion_cmp_source = require("dataform.completion.cmp")
 
 return M

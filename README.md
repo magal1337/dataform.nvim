@@ -49,7 +49,11 @@ use {
   config = function ()
     require('dataform').setup({
         -- refresh dataform metadata on each save
-        compile_on_save = true
+        compile_on_save = true,
+        -- skip recompilation when project files are unchanged (in-memory)
+        cache = true,
+        -- persist cache to disk so it survives across Neovim sessions
+        cache_persist = false,
     })
   end
 }
@@ -111,6 +115,17 @@ You can then trigger compilation manually at any time using the command:
 lua require('dataform').compile()
 ```
 
+### Compilation Caching
+
+By default, the plugin skips recompilation when no project files have changed (based on file mtimes in `definitions/`, `includes/`, `package.json`, `dataform.json`, and `workflow_settings.yaml`). A `(cached)` notice will appear instead of running the CLI.
+
+Set `cache_persist = true` to persist the cache to disk so it survives Neovim restarts.
+
+To manually clear the cache:
+```vim
+:DataformClearCache
+```
+
 ## 🌀 Commands
 | Command | Action | Arguments|
 |---|---|---|
@@ -124,6 +139,7 @@ lua require('dataform').compile()
 |`:DataformRunAssertions`| Will run the current model assertions. ||
 |`:DataformFindDependencies`| Will return a Finder with all dependencies for current model ||
 |`:DataformFindDependents`| Will return a Finder with all dependents for current model ||
+|`:DataformClearCache`| Clears the in-memory and on-disk compilation cache, forcing a fresh compile on next trigger. ||
 
 🔮 It's recommended to use these commands encapsulated in some custom keymaps to make it more convenient. Choose what suits you best.
 ## 📖 Syntax Highlight

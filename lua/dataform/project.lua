@@ -2,14 +2,18 @@ local utils = require("dataform.utils")
 
 local dataform = {}
 dataform.compiled_project_table = {}
+dataform._compile_hash = nil
 
 ---@alias DataformUserConfig table
 ---@field compile_on_save boolean? (default: true) Automatically compile Dataform project on saving a .sqlx file.
 ---@field bq_dry_run boolean? (default: true) Run `bq query --dry_run` after opening the SQL buffer and show the result as a notification.
-
+---@field cache boolean? (default: true) Skip recompilation when project files are unchanged (in-memory check).
+---@field cache_persist boolean? (default: false) Persist cache to disk so it survives across Neovim sessions.
 local default_config = {
   compile_on_save = true,
   bq_dry_run = true,
+  cache = true,
+  cache_persist = false,
 }
 dataform.config = vim.deepcopy(default_config)
 
@@ -21,6 +25,69 @@ function dataform.setup(user_config)
       dataform.config[key] = value
     end
   end
+end
+
+local function compute_project_hash(cwd)
+  local uv = vim.uv or vim.loop
+  local entries = {}
+  local single_files = {
+    cwd .. "/package.json",
+    cwd .. "/dataform.json",
+    cwd .. "/workflow_settings.yaml",
+    cwd .. "/workflow_settings.yml",
+  }
+  for _, path in ipairs(single_files) do
+    local stat = uv.fs_stat(path)
+    if stat then
+      table.insert(entries, path .. ":" .. stat.mtime.sec .. ":" .. stat.size)
+    end
+  end
+  for _, dir in ipairs({ cwd .. "/includes/", cwd .. "/definitions/" }) do
+    local raw = vim.fn.glob(dir .. "**", false, false)
+    if raw ~= "" then
+      for _, path in ipairs(vim.split(raw, "\n", { plain = true })) do
+        if path ~= "" then
+          local stat = uv.fs_stat(path)
+          if stat then
+            table.insert(entries, path .. ":" .. stat.mtime.sec .. ":" .. stat.size)
+          end
+        end
+      end
+    end
+  end
+  table.sort(entries)
+  return vim.fn.sha256(table.concat(entries, "|"))
+end
+
+local function get_cache_paths(cwd)
+  local base = vim.fn.stdpath("cache") .. "/dataform.nvim/" .. vim.fn.sha256(cwd):sub(1, 16)
+  return { dir = base, hash_file = base .. "/hash", json_file = base .. "/compiled.json" }
+end
+
+local function load_from_cache(paths, current_hash)
+  local hash_file = io.open(paths.hash_file, "r")
+  if not hash_file then return nil end
+  local stored_hash = hash_file:read("*l")
+  hash_file:close()
+
+  if stored_hash ~= current_hash then return nil end
+
+  local json_file = io.open(paths.json_file, "r")
+  if not json_file then return nil end
+  local cached = json_file:read("*all")
+  json_file:close()
+
+  local ok, decoded = pcall(vim.fn.json_decode, cached)
+  if ok and type(decoded) == "table" then return decoded end
+  return nil
+end
+
+local function save_to_cache(paths, current_hash, content)
+  vim.fn.mkdir(paths.dir, "p")
+  local json_file = io.open(paths.json_file, "w")
+  if json_file then json_file:write(content); json_file:close() end
+  local hash_file = io.open(paths.hash_file, "w")
+  if hash_file then hash_file:write(current_hash); hash_file:close() end
 end
 
 function dataform.set_dataform_workdir_project_path()
@@ -73,16 +140,49 @@ end
 
 function dataform.compile()
   local command = "dataform compile"
+
+  if not dataform.config.cache then
+    local status, content = utils.os_execute_with_status(command .. " --json", true)
+    if status == 0 then
+      dataform.compiled_project_table = vim.fn.json_decode(content)
+      utils.notify("Dataform compiled successfully.", vim.log.levels.INFO)
+    else
+      local _, err = utils.os_execute_with_status(command)
+      utils.notify("Error: Dataform compile failed. \n\n" .. err, vim.log.levels.ERROR)
+    end
+    return
+  end
+
+  local cwd = vim.fn.getcwd()
+  local current_hash = compute_project_hash(cwd)
+
+  if current_hash == dataform._compile_hash then
+    utils.notify("Dataform compiled successfully (cached).", vim.log.levels.INFO)
+    return
+  end
+
+  if dataform.config.cache_persist then
+    local paths = get_cache_paths(cwd)
+    local cached = load_from_cache(paths, current_hash)
+    if cached then
+      dataform.compiled_project_table = cached
+      dataform._compile_hash = current_hash
+      utils.notify("Dataform compiled successfully (cached).", vim.log.levels.INFO)
+      return
+    end
+  end
+
   local status, content = utils.os_execute_with_status(command .. " --json", true)
   if status == 0 then
     dataform.compiled_project_table = vim.fn.json_decode(content)
+    dataform._compile_hash = current_hash
     utils.notify("Dataform compiled successfully.", vim.log.levels.INFO)
+    if dataform.config.cache_persist then
+      save_to_cache(get_cache_paths(cwd), current_hash, content)
+    end
   else
-    local _, content_error = utils.os_execute_with_status(command)
-    utils.notify(
-      "Error: Dataform compile failed. \n\n" .. content_error,
-      vim.log.levels.ERROR
-    )
+    local _, err = utils.os_execute_with_status(command)
+    utils.notify("Error: Dataform compile failed. \n\n" .. err, vim.log.levels.ERROR)
   end
 end
 
@@ -301,6 +401,16 @@ function dataform.compile_on_save()
   if dataform.config.compile_on_save then
     dataform.compile()
   end
+end
+
+function dataform.clear_cache()
+  dataform._compile_hash = nil
+  local cwd = vim.fn.getcwd()
+  local paths = get_cache_paths(cwd)
+  os.remove(paths.json_file)
+  os.remove(paths.hash_file)
+  vim.fn.delete(paths.dir, "d")
+  utils.notify("Dataform cache cleared.", vim.log.levels.INFO)
 end
 
 return dataform
